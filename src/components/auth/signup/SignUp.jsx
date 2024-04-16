@@ -1,8 +1,10 @@
-import { createAccountWithEmailAndPassword } from 'clients/firebase.auth';
-import TextInputCustom from 'components/styledComponents/TextInputCustom';
 import React from 'react';
 import { Button, StyleSheet, View } from 'react-native';
-import OwnerService from 'services/owner.service';
+import { createAccountWithEmailAndPassword } from '../../../clients/firebase.auth';
+import OwnerService from '../../../services/owner.service';
+import { SCREENS_CONSTANTS } from '../../navigator/helper';
+import Link from '../../styledComponents/Link';
+import TextInputCustom from '../../styledComponents/TextInputCustom';
 
 /**
  * Component for rendering a sign-up form.
@@ -25,6 +27,8 @@ const SignUp = ({
   email,
   password,
   setUserDataHandler,
+  route,
+  navigation,
 }) => {
   return (
     <View style={styles.container}>
@@ -53,7 +57,7 @@ const SignUp = ({
         onPress={async () => {
           const userId = await createAccountWithEmailAndPassword(
             email,
-            password,
+            password
           );
           const ownerService = OwnerService.getInstance();
           ownerService.create(userId, {
@@ -65,6 +69,15 @@ const SignUp = ({
           });
         }}
       />
+      <View>
+        <Link
+          onPress={() => {
+            navigation.replace(SCREENS_CONSTANTS.LOG_IN);
+          }}
+        >
+          Already have an account?
+        </Link>
+      </View>
     </View>
   );
 };
@@ -78,6 +91,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     gap: 10,
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },

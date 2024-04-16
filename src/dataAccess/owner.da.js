@@ -1,11 +1,10 @@
-import { DB } from 'clients/firebase.app';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { IOwner } from 'models/owner.model';
+import { DB } from '../clients/firebase.app';
 
 export default class OwnerDA {
   static instance;
   ENTITY_NAME = 'owners';
-  constructor() { }
+  constructor() {}
   /**
    * Retrieve the singleton instance of OwnerDA.
    *
@@ -32,10 +31,7 @@ export default class OwnerDA {
    * @param {Partial<IOwner>} ownerData - The data of the owner to create
    * @return {Promise<void>} A promise that resolves when the document is successfully added
    */
-  async create(
-    ownerId,
-    ownerData,
-  ) {
+  async create(ownerId, ownerData) {
     // Add a new document in collection "owners"
     // using the owner's id and data provided
     await setDoc(doc(DB, this.ENTITY_NAME, ownerId), ownerData);

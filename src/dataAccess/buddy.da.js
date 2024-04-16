@@ -1,4 +1,3 @@
-import { DB } from 'clients/firebase.app';
 import {
   collection,
   doc,
@@ -8,12 +7,12 @@ import {
   setDoc,
   where,
 } from 'firebase/firestore';
-import { IBuddy } from 'models/buddy.model';
+import { DB } from '../clients/firebase.app';
 
 export default class BuddyDA {
   static instance;
   ENTITY_NAME = 'buddies';
-  constructor() { }
+  constructor() {}
   /**
    * Retrieve the singleton instance of BuddyDA.
    *
@@ -66,10 +65,10 @@ export default class BuddyDA {
     const buddies = [];
     const queryRequest = query(
       collection(DB, this.ENTITY_NAME),
-      where('ownerId', '==', ownerId),
+      where('ownerId', '==', ownerId)
     );
     const docSnaps = await getDocs(queryRequest);
-    docSnaps.forEach(docSnap => buddies.push(docSnap.data()));
+    docSnaps.forEach((docSnap) => buddies.push(docSnap.data()));
     return buddies;
   }
 }

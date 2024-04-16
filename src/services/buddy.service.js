@@ -3,7 +3,7 @@ import { IBuddy } from '../models/buddy.model';
 
 export default class BuddyService {
   static instance;
-  constructor() { }
+  constructor() {}
   /**
    * Returns an instance of BuddyService, creating a new one if it doesn't exist.
    * This method is a way to get the instance of the BuddyService class, as this class is a
