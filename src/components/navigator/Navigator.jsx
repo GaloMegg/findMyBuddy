@@ -1,9 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
-import { STACK } from '../../utils/navigationStack';
-import LogInContainer from '../auth/login/LogInContainer';
-import SignUpContainer from '../auth/signup/SignUpContainer';
-import { SCREENS_CONSTANTS } from "./helper";
+import AppNavigation from './appNavigation/AppNavigation';
 
 /**
  * Renders a navigator component with the provided children.
@@ -15,18 +12,8 @@ import { SCREENS_CONSTANTS } from "./helper";
 const Navigator = ({ children }) => {
   return (
     <NavigationContainer>
-      <STACK.Navigator>
-        <STACK.Screen name={SCREENS_CONSTANTS.LOG_IN}>
-          {({ route, navigation }) => {
-            return <LogInContainer route={route} navigation={navigation} />;
-          }}
-        </STACK.Screen>
-        <STACK.Screen name={SCREENS_CONSTANTS.SIGN_UP}>
-          {({ route, navigation }) => {
-            return <SignUpContainer route={route} navigation={navigation} />;
-          }}
-        </STACK.Screen>
-      </STACK.Navigator>
+      {/* <AuthNavigation /> */}
+      <AppNavigation />
     </NavigationContainer>
   );
 };

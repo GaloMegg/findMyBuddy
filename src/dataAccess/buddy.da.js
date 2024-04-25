@@ -12,7 +12,7 @@ import { DB } from '../clients/firebase.app';
 export default class BuddyDA {
   static instance;
   ENTITY_NAME = 'buddies';
-  constructor() {}
+  constructor() { }
   /**
    * Retrieve the singleton instance of BuddyDA.
    *
@@ -72,3 +72,4 @@ export default class BuddyDA {
     return buddies;
   }
 }
+

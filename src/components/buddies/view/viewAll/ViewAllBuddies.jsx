@@ -8,9 +8,8 @@ import {
   View
 } from 'react-native'
 // import {ICONS} from '../../../../utils/icons';
-import EDIT from 'assets/icons/actions/edit.png'
-import BuddyTypeIcon from 'components/styledComponents/BuddyTypeIcon'
-import Card from 'components/styledComponents/Card'
+// import EDIT from '~/assets/icons/actions/edit.png'
+import Card from '~/components/styledComponents/Card'
 
 
 /**
@@ -47,7 +46,7 @@ const ViewAllBuddies = ({ buddies }) => {
                     <Text>{item.breed}</Text>
                     <Text>{item.image}</Text>
                   </View>
-                  <BuddyTypeIcon width={30} height={30} buddyType={item.type} />
+                  {/* <BuddyTypeIcon width={30} height={30} buddyType={item.type} /> */}
                 </View>
                 <View
                   style={{

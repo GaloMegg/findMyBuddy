@@ -1,5 +1,4 @@
 import BuddyDA from '../dataAccess/buddy.da';
-import { IBuddy } from '../models/buddy.model';
 
 export default class BuddyService {
   static instance;

@@ -1,6 +1,7 @@
-import useGetBuddies from 'hooks/useGetBuddies'
 import React from 'react'
 import { StyleSheet, Text } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import useGetBuddies from '~/hooks/useGetBuddies'
 import ViewAllBuddies from './ViewAllBuddies'
 
 /**
@@ -15,7 +16,9 @@ const ViewAllBuddiesContainer = ({ }) => {
   })
   if (loading)
     return (
-      <Text>Loading</Text>
+      <SafeAreaView>
+        <Text>Loading</Text>
+      </SafeAreaView>
     )
   return <ViewAllBuddies buddies={buddies} />
 }

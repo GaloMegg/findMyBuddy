@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import BuddyService from 'services/buddy.service';
+import BuddyService from '~/services/buddy.service';
 
 
 const buddyService = BuddyService.getInstance();
