@@ -13,6 +13,6 @@ export const userSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setUser, resetUser } = counterSlice.actions
+export const { setUser, resetUser } = userSlice.actions
 
-export default counterSlice.reducer
+export default userSlice.reducer

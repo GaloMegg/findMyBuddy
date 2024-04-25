@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, StyleSheet, View } from 'react-native';
+import { SCREENS_CONSTANTS } from '~/components/navigator/authNavigation/helper.js';
 import { createAccountWithEmailAndPassword } from '../../../clients/firebase.auth';
 import OwnerService from '../../../services/owner.service';
-import { SCREENS_CONSTANTS } from '../../navigator/helper';
 import Link from '../../styledComponents/Link';
 import TextInputCustom from '../../styledComponents/TextInputCustom';
 
@@ -32,43 +32,47 @@ const SignUp = ({
 }) => {
   return (
     <View style={styles.container}>
-      {/* Name input */}
-      <TextInputCustom
-        placeholder="Name"
-        onChangeText={(text) => setUserDataHandler('name', text)}
-        value={name}
-      />
-      {/* Email input */}
-      <TextInputCustom
-        placeholder="Email"
-        value={email}
-        onChangeText={(text) => setUserDataHandler('email', text)}
-      />
-      {/* Password input */}
-      <TextInputCustom
-        placeholder="Password"
-        onChangeText={(text) => setUserDataHandler('password', text)}
-        secureTextEntry={true}
-        value={password}
-      />
-      {/* Sign up button */}
-      <Button
-        title="Sign Up"
-        onPress={async () => {
-          const userId = await createAccountWithEmailAndPassword(
-            email,
-            password
-          );
-          const ownerService = OwnerService.getInstance();
-          ownerService.create(userId, {
-            name,
-            email,
-            location: { latitude: 0, longitude: 0 },
-            ownerId: userId,
-            phoneNumber: '',
-          });
-        }}
-      />
+      <View style={styles.inputs}>
+
+        {/* Name input */}
+        <TextInputCustom
+          placeholder="Name"
+          onChangeText={(text) => setUserDataHandler('name', text)}
+          value={name}
+        />
+        {/* Email input */}
+        <TextInputCustom
+          placeholder="Email"
+          value={email}
+          onChangeText={(text) => setUserDataHandler('email', text)}
+        />
+        {/* Password input */}
+        <TextInputCustom
+          placeholder="Password"
+          onChangeText={(text) => setUserDataHandler('password', text)}
+          secureTextEntry={true}
+          value={password}
+        />
+        {/* Sign up button */}
+        <Button
+          title="Sign Up"
+          onPress={async () => {
+            const userId = await createAccountWithEmailAndPassword(
+              email,
+              password
+            );
+            const ownerService = OwnerService.getInstance();
+            ownerService.create(userId, {
+              name,
+              email,
+              location: { latitude: 0, longitude: 0 },
+              ownerId: userId,
+              phoneNumber: '',
+            });
+          }}
+        />
+      </View>
+
       <View>
         <Link
           onPress={() => {
@@ -91,8 +95,14 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     gap: 10,
-    width: '100%',
+    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  inputs: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 10,
+    width: '80%',
+  }
 });

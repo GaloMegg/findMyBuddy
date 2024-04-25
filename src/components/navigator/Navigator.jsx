@@ -1,19 +1,24 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
+import { useStore } from 'react-redux';
 import AppNavigation from './appNavigation/AppNavigation';
+import AuthNavigation from './authNavigation/AuthNavigation';
+
 
 /**
- * Renders a navigator component with the provided children.
+ * Renders a navigator component
  *
- * @param {Object} props - The props object.
- * @param {ReactNode} props.children - The children components to render.
  * @return {JSX.Element} The rendered navigator component.
  */
-const Navigator = ({ children }) => {
+const Navigator = () => {
+  const { userId } = useStore(state => state.user)
   return (
-    <NavigationContainer>
-      {/* <AuthNavigation /> */}
-      <AppNavigation />
+    <NavigationContainer>{
+      userId ?
+        <AppNavigation />
+        :
+        <AuthNavigation />
+    }
     </NavigationContainer>
   );
 };

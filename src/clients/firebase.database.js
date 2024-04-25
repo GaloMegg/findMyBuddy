@@ -1,0 +1,1 @@
+export const DATABASE_BASE_URL = 'https://findmybuddy-c8361-default-rtdb.firebaseio.com/'

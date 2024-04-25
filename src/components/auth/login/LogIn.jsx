@@ -1,8 +1,9 @@
 import { AntDesign } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { Button, Pressable, StyleSheet, View } from 'react-native';
+import { SCREENS_CONSTANTS } from '~/components/navigator/authNavigation/helper.js';
+
 import { loginWithEmailAndPassword } from '../../../clients/firebase.auth';
-import { SCREENS_CONSTANTS } from '../../navigator/helper';
 import Link from '../../styledComponents/Link';
 import Loader from '../../styledComponents/Loader';
 import TextInputCustom from '../../styledComponents/TextInputCustom';
@@ -23,11 +24,10 @@ import TextInputCustom from '../../styledComponents/TextInputCustom';
  * @return {JSX.Element} The sign-up form component
  */
 const LogIn = ({ email, password, setUserDataHandler, route, navigation }) => {
-  console.log(route, navigation);
   const [loading, setLoading] = useState(false);
   return (
     <View style={styles.container}>
-      <View style={{ width: '80%' }}>
+      <View style={styles.inputs}>
         {/* Email input */}
         <TextInputCustom
           placeholder="Email"
@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     padding: 20,
-
     display: 'flex',
     flexDirection: 'column',
     gap: 10,
@@ -93,4 +92,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  inputs: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 10,
+    width: '80%',
+  }
 });
