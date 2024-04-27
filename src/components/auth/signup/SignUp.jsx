@@ -1,8 +1,10 @@
 import React from 'react';
 import { Button, StyleSheet, View } from 'react-native';
+import { useDispatch } from 'react-redux';
 import { SCREENS_CONSTANTS } from '~/components/navigator/authNavigation/helper.js';
 import { createAccountWithEmailAndPassword } from '../../../clients/firebase.auth';
 import OwnerService from '../../../services/owner.service';
+import { setUser } from '../../../store/features/userSlice.slice';
 import Link from '../../styledComponents/Link';
 import TextInputCustom from '../../styledComponents/TextInputCustom';
 
@@ -30,6 +32,7 @@ const SignUp = ({
   route,
   navigation,
 }) => {
+  const dispatch = useDispatch()
   return (
     <View style={styles.container}>
       <View style={styles.inputs}>
@@ -57,18 +60,25 @@ const SignUp = ({
         <Button
           title="Sign Up"
           onPress={async () => {
-            const userId = await createAccountWithEmailAndPassword(
-              email,
-              password
-            );
-            const ownerService = OwnerService.getInstance();
-            ownerService.create(userId, {
-              name,
-              email,
-              location: { latitude: 0, longitude: 0 },
-              ownerId: userId,
-              phoneNumber: '',
-            });
+            try {
+              const userId = await createAccountWithEmailAndPassword(
+                email,
+                password
+              );
+              console.log(userId)
+              const ownerService = OwnerService.getInstance();
+              const created = await ownerService.create(userId, {
+                name,
+                email,
+                location: { latitude: 0, longitude: 0 },
+                ownerId: userId,
+                phoneNumber: '',
+              });
+              console.log(created)
+              dispatch(setUser({ userId: created.ownerId }))
+            } catch (error) {
+              console.error(error)
+            }
           }}
         />
       </View>

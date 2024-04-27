@@ -3,7 +3,9 @@ import React, { useState } from 'react';
 import { Button, Pressable, StyleSheet, View } from 'react-native';
 import { SCREENS_CONSTANTS } from '~/components/navigator/authNavigation/helper.js';
 
+import { useDispatch } from 'react-redux';
 import { loginWithEmailAndPassword } from '../../../clients/firebase.auth';
+import { setUser } from '../../../store/features/userSlice.slice';
 import Link from '../../styledComponents/Link';
 import Loader from '../../styledComponents/Loader';
 import TextInputCustom from '../../styledComponents/TextInputCustom';
@@ -24,6 +26,7 @@ import TextInputCustom from '../../styledComponents/TextInputCustom';
  * @return {JSX.Element} The sign-up form component
  */
 const LogIn = ({ email, password, setUserDataHandler, route, navigation }) => {
+  const dispatch = useDispatch()
   const [loading, setLoading] = useState(false);
   return (
     <View style={styles.container}>
@@ -45,8 +48,17 @@ const LogIn = ({ email, password, setUserDataHandler, route, navigation }) => {
         <Button
           title="Log in"
           onPress={async () => {
-            const user = await loginWithEmailAndPassword(email, password);
-            console.log(user);
+            try {
+
+
+              const owner = await loginWithEmailAndPassword(email, password);
+              console.log(owner)
+              const ownerId = owner.user.uid
+              console.log(ownerId)
+              dispatch(setUser({ userId: ownerId }));
+            } catch (error) {
+              console.error(error)
+            }
           }}
         />
       </View>
