@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { useSelector } from 'react-redux'
 import useGetBuddies from '~/hooks/useGetBuddies'
 import ViewAllBuddies from './ViewAllBuddies'
 
@@ -11,8 +12,10 @@ import ViewAllBuddies from './ViewAllBuddies'
  * @return {JSX.Element} The rendered ViewAllBuddiesContainer component.
  */
 const ViewAllBuddiesContainer = ({ }) => {
+  const { userId } = useSelector(state => state.user)
+
   const { buddies, deleteBuddy, loading } = useGetBuddies({
-    ownerId: 'r85AaNEsNBe5xkMs67E1eaxQYGg1',
+    ownerId: userId,
   })
   if (loading)
     return (
@@ -20,7 +23,9 @@ const ViewAllBuddiesContainer = ({ }) => {
         <Text>Loading</Text>
       </SafeAreaView>
     )
-  return <ViewAllBuddies buddies={buddies} />
+  return <SafeAreaView>
+    <ViewAllBuddies buddies={buddies} />
+  </SafeAreaView>
 }
 
 export default ViewAllBuddiesContainer
