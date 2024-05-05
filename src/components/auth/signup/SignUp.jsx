@@ -39,19 +39,19 @@ const SignUp = ({
 
         {/* Name input */}
         <TextInputCustom
-          placeholder="Name"
+          label="Name"
           onChangeText={(text) => setUserDataHandler('name', text)}
           value={name}
         />
         {/* Email input */}
         <TextInputCustom
-          placeholder="Email"
+          label="Email"
           value={email}
           onChangeText={(text) => setUserDataHandler('email', text)}
         />
         {/* Password input */}
         <TextInputCustom
-          placeholder="Password"
+          label="Password"
           onChangeText={(text) => setUserDataHandler('password', text)}
           secureTextEntry={true}
           value={password}
@@ -61,21 +61,21 @@ const SignUp = ({
           title="Sign Up"
           onPress={async () => {
             try {
-              const userId = await createAccountWithEmailAndPassword(
+              const ownerId = await createAccountWithEmailAndPassword(
                 email,
                 password
               );
-              console.log(userId)
+              console.log(ownerId)
               const ownerService = OwnerService.getInstance();
-              const created = await ownerService.create(userId, {
+              const created = await ownerService.create(ownerId, {
                 name,
                 email,
                 location: { latitude: 0, longitude: 0 },
-                ownerId: userId,
+                ownerId: ownerId,
                 phoneNumber: '',
               });
               console.log(created)
-              dispatch(setUser({ userId: created.ownerId }))
+              dispatch(setUser({ ownerId: created.ownerId }))
             } catch (error) {
               console.error(error)
             }

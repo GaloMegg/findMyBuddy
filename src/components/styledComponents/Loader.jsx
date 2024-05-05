@@ -6,7 +6,7 @@ import { ActivityIndicator } from "react-native";
  * @param {string} size - The size of the loader. Defaults to 'small'.
  * @return {JSX.Element} The rendered loader component.
  */
-const Loader = ({ color = "#0000ff", size = "small" }) => {
+const Loader = ({ color, size = "large" }) => {
   return <ActivityIndicator size={size} color={color} />;
 };
 export default Loader;

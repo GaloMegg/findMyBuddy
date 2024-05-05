@@ -37,7 +37,7 @@ export default class BuddyDA {
   async create(buddyId, BuddyData) {
     // Add a new document in the "buddies" collection
     // using the buddy's id and data provided
-    await setDoc(doc(DB, this.ENTITY_NAME, buddyId), BuddyData);
+    return await setDoc(doc(DB, this.ENTITY_NAME, buddyId), BuddyData);
   }
   /**
    * Find a buddy document by its owner id.

@@ -20,8 +20,11 @@ const useGetBuddies = ({ ownerId }) => {
    * @param {number} ownerId - The ID of the owner.
    * @return {Promise<void>} - A promise that resolves when the operation is complete.
    */
-  const getAllBuddies = async (ownerId) => {
+  const getAllBuddies = async (ownerId, where) => {
+    console.log(where)
+    console.log('getAllBuddies', ownerId);
     try {
+      setLoading(true);
       const result = await buddyService.findAll(ownerId);
       setBuddies(result);
     } catch (error) {
@@ -45,7 +48,7 @@ const useGetBuddies = ({ ownerId }) => {
   useEffect(() => {
     setLoading(true);
     if (ownerId) {
-      getAllBuddies(ownerId);
+      getAllBuddies(ownerId, 'hook');
     }
     return () => {
       setBuddies([]);
@@ -57,6 +60,7 @@ const useGetBuddies = ({ ownerId }) => {
   return {
     buddies,
     deleteBuddy,
+    getAllBuddies,
     loading,
   };
 };

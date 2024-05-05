@@ -33,13 +33,13 @@ const LogIn = ({ email, password, setUserDataHandler, route, navigation }) => {
       <View style={styles.inputs}>
         {/* Email input */}
         <TextInputCustom
-          placeholder="Email"
+          label="Email"
           value={email}
           onChangeText={(text) => setUserDataHandler('email', text)}
         />
         {/* Password input */}
         <TextInputCustom
-          placeholder="Password"
+          label="Password"
           onChangeText={(text) => setUserDataHandler('password', text)}
           secureTextEntry={true}
           value={password}
@@ -52,10 +52,8 @@ const LogIn = ({ email, password, setUserDataHandler, route, navigation }) => {
 
 
               const owner = await loginWithEmailAndPassword(email, password);
-              console.log(owner)
               const ownerId = owner.user.uid
-              console.log(ownerId)
-              dispatch(setUser({ userId: ownerId }));
+              dispatch(setUser({ ownerId }));
             } catch (error) {
               console.error(error)
             }

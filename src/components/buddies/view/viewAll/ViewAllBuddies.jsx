@@ -1,5 +1,5 @@
-import { AntDesign } from '@expo/vector-icons';
-import React from 'react';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
 import {
   FlatList,
   Pressable,
@@ -8,7 +8,8 @@ import {
   View
 } from 'react-native';
 import Card from '~/components/styledComponents/Card';
-
+import AddButton from '../../../styledComponents/AddButton';
+import CreateBuddiesContainer from '../../create/CreateBuddiesContainer';
 
 /**
  * Renders a View displaying all the buddies.
@@ -16,12 +17,53 @@ import Card from '~/components/styledComponents/Card';
  * @param {Props} buddies - The list of buddies to display
  * @return {JSX.Element} The View displaying all buddies
  */
-const ViewAllBuddies = ({ buddies }) => {
+const ViewAllBuddies = ({ buddies, ownerId, navigation, getAllBuddies, loading }) => {
+  const [modal, setModal] = useState(false)
+
   return (
     <View style={{ width: '100%' }}>
-      <Text>ViewAllBuddies</Text>{
+      <View style={{
+        flexDirection: 'row', justifyContent: 'flex-end', width: '100%', paddingHorizontal: 10
+      }}>
+        <Pressable
+          onPress={_ => {
+            console.log('TODO Redirect to buddies/{buddyId}/edit')
+          }}
+          style={({ pressed }) => [
+            {
+              backgroundColor: pressed ? 'rgb(210, 230, 255)' : 'red'
+            },
+            {
+              height: '100%',
+            }
+          ]}
+        >
+          <Ionicons name="reload-circle" size={24} color="black" />
+        </Pressable>
+        <Pressable
+          onPress={_ => {
+            console.log('TODO Redirect to buddies/{buddyId}/edit')
+          }}
+          style={({ pressed }) => [
+            {
+              backgroundColor: pressed ? 'rgb(210, 230, 255)' : 'red'
+            },
+            {
+              height: '100%',
+            }
+          ]}
+        >
+          <AddButton onPress={() => setModal(true)} />
+        </Pressable>
+      </View>
+
+
+
+      {
         buddies.length ? <FlatList
-          contentContainerStyle={{ gap: 10, width: '100%' }}
+          refreshing={loading}
+          onRefresh={_ => getAllBuddies(ownerId, 'refresh')}
+          contentContainerStyle={{ gap: 10, width: '100%', height: '100%' }}
           renderItem={({ item }) => {
             return (
               <Card>
@@ -109,16 +151,19 @@ const ViewAllBuddies = ({ buddies }) => {
               </Card>
             )
           }}
-          data={[...buddies, ...buddies, ...buddies, ...buddies]}
+          data={buddies}
           keyExtractor={item =>
             item.buddyId + ((Math.random() * 100) / Math.random()).toString()
           }
         /> :
-          <View style={{ width: '100%', height: '100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
-            <AntDesign name="pluscircle" size={24} color="black" />
+          <View style={{ width: '100%', height: '100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10 }} >
+            <AntDesign name="pluscircle" size={24} color="black" onPress={_ => {
+              setModal(true)
+            }} />
           </View>
       }
 
+      {modal && <CreateBuddiesContainer closeModal={_ => setModal(false)} />}
     </View>
   )
 }

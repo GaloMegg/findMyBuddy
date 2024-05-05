@@ -11,10 +11,10 @@ import AuthNavigation from './authNavigation/AuthNavigation';
  * @return {JSX.Element} The rendered navigator component.
  */
 const Navigator = () => {
-  const { userId } = useSelector(state => state.user)
+  const { ownerId } = useSelector(state => state.user)
   return (
     <NavigationContainer>{
-      userId ?
+      ownerId ?
         <AppNavigation />
         :
         <AuthNavigation />
