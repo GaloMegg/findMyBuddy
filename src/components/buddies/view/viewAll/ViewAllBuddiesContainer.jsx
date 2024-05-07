@@ -18,6 +18,7 @@ const ViewAllBuddiesContainer = ({ navigation }) => {
   const { buddies, deleteBuddy, getAllBuddies, loading } = useGetBuddies({
     ownerId,
   })
+  console.log('buddies', buddies)
   if (loading)
     return (
       <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

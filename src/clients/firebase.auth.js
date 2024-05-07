@@ -21,7 +21,6 @@ export const createAccountWithEmailAndPassword = async (
     const { uid } = userCredential.user;
     return uid;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };

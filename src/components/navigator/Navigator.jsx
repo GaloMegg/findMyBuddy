@@ -12,6 +12,7 @@ import AuthNavigation from './authNavigation/AuthNavigation';
  */
 const Navigator = () => {
   const { ownerId } = useSelector(state => state.user)
+
   return (
     <NavigationContainer>{
       ownerId ?

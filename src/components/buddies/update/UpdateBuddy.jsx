@@ -12,7 +12,7 @@ import { BUDDIES_STATUS_OPTIONS, BUDDIES_TYPE_OPTIONS } from '../helper';
  * @param {function} props.closeModal - The function to close the modal.
  * @return {JSX.Element} The rendered container component.
  */
-const CreateBuddy = ({ loading, closeModal, buddyData, setbuddyData, onCreate }) => {
+const UpdateBuddy = ({ loading, closeModal, buddyData, setbuddyData, onCreate }) => {
     if (loading) return <Modal>
         <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
             <Loader />
@@ -44,19 +44,19 @@ const CreateBuddy = ({ loading, closeModal, buddyData, setbuddyData, onCreate })
                             value={buddyData.name}
                             onChangeText={(item) => setbuddyData({ ...buddyData, name: item })}
                         />
-                        <SelectInputComponent label='Type' options={BUDDIES_TYPE_OPTIONS} onSelect={item => setbuddyData({ ...buddyData, type: item.title.toUpperCase() })} />
-
-                        <SelectInputComponent label='Status' options={BUDDIES_STATUS_OPTIONS} onSelect={item => setbuddyData({ ...buddyData, status: item.title.toUpperCase() })} />
+                        <SelectInputComponent label='Type' value={buddyData.type} options={BUDDIES_TYPE_OPTIONS} onSelect={item => setbuddyData({ ...buddyData, type: item.title.toUpperCase() })} />
+                        <SelectInputComponent label='Status' options={BUDDIES_STATUS_OPTIONS} value={buddyData.status} onSelect={item => setbuddyData({ ...buddyData, status: item.title.toUpperCase() })} />
                     </View>
                     <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'center' }}>
                         <Button title='Cancel' onPress={closeModal} />
-                        <Button title='Create' onPress={onCreate} />
+                        <Button title='Update' onPress={onCreate} />
                     </View>
                 </ScrollView>
 
             </SafeAreaView>
+
         </Modal >
     )
 }
-export default CreateBuddy
+export default UpdateBuddy
 const styles = StyleSheet.create({})

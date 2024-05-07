@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 const useGetLocation = () => {
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
-    console.log(location, errorMsg);
 
     /**
      * Requests foreground permissions for the location.

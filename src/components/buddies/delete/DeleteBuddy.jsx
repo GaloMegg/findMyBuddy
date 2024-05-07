@@ -1,10 +1,8 @@
 import { AntDesign } from '@expo/vector-icons';
 import { Button, Modal, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Loader from '../../styledComponents/Loader';
-import SelectInputComponent from '../../styledComponents/SelectInputComponent';
-import TextInputCustom from '../../styledComponents/TextInputCustom';
-import { BUDDIES_STATUS_OPTIONS, BUDDIES_TYPE_OPTIONS } from '../helper';
-
+import { ICONS_MAPPED } from './helper';
 /**
  * Renders a container component for creating buddies.
  *
@@ -12,7 +10,7 @@ import { BUDDIES_STATUS_OPTIONS, BUDDIES_TYPE_OPTIONS } from '../helper';
  * @param {function} props.closeModal - The function to close the modal.
  * @return {JSX.Element} The rendered container component.
  */
-const CreateBuddy = ({ loading, closeModal, buddyData, setbuddyData, onCreate }) => {
+const DeleteBuddy = ({ loading, closeModal, buddyData, onDelete }) => {
     if (loading) return <Modal>
         <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
             <Loader />
@@ -32,25 +30,26 @@ const CreateBuddy = ({ loading, closeModal, buddyData, setbuddyData, onCreate })
                 <ScrollView contentContainerStyle={{ gap: 10, alignItems: 'center', justifyContent: 'center', height: '100%' }}
                     style={{ width: '100%', }}>
 
-                    <Text style={{ fontSize: 20 }}>Create a new buddy</Text>
-                    <View style={{
-                        gap: 10,
-                        width: '100%',
-                        alignItems: 'center',
-                        paddingHorizontal: '10%',
-                    }}>
-                        <TextInputCustom
-                            label="Name"
-                            value={buddyData.name}
-                            onChangeText={(item) => setbuddyData({ ...buddyData, name: item })}
-                        />
-                        <SelectInputComponent label='Type' options={BUDDIES_TYPE_OPTIONS} onSelect={item => setbuddyData({ ...buddyData, type: item.title.toUpperCase() })} />
+                    <Text style={{ fontSize: 20 }}>Delete a buddy</Text>
+                    <View>
+                        <Text>Are you sure you want to delete {buddyData.name}?</Text>
+                        <View style={{ gap: 10, flexDirection: 'row', padding: 10, justifyContent: 'center' }}>
+                            <View style={{ gap: 10, flexDirection: 'row', padding: 10, justifyContent: 'center' }}>
 
-                        <SelectInputComponent label='Status' options={BUDDIES_STATUS_OPTIONS} onSelect={item => setbuddyData({ ...buddyData, status: item.title.toUpperCase() })} />
+                                <Text>Type:</Text>
+                                <Icon name={ICONS_MAPPED[buddyData.type]} />
+                            </View>
+                            <View style={{ gap: 10, flexDirection: 'row', padding: 10, justifyContent: 'center' }}>
+
+                                <Text>Status:</Text>
+                                <Icon name={ICONS_MAPPED[buddyData.status]} />
+                            </View>
+                        </View>
+
                     </View>
                     <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'center' }}>
                         <Button title='Cancel' onPress={closeModal} />
-                        <Button title='Create' onPress={onCreate} />
+                        <Button title='Delete' onPress={onDelete} />
                     </View>
                 </ScrollView>
 
@@ -58,5 +57,5 @@ const CreateBuddy = ({ loading, closeModal, buddyData, setbuddyData, onCreate })
         </Modal >
     )
 }
-export default CreateBuddy
+export default DeleteBuddy
 const styles = StyleSheet.create({})

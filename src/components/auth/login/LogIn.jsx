@@ -67,7 +67,6 @@ const LogIn = ({ email, password, setUserDataHandler, route, navigation }) => {
             <Pressable
               key={provider}
               onPress={() => {
-                console.log(provider);
                 setLoading(provider);
               }}
             >
