@@ -1,10 +1,10 @@
 import { AntDesign } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { Button, Pressable, StyleSheet, View } from 'react-native';
-import { SCREENS_CONSTANTS } from '~/components/navigator/authNavigation/helper.js';
-
+import { Button, Keyboard, Pressable, StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
+import { SCREENS_CONSTANTS } from '~/components/navigator/authNavigation/helper.js';
 import { loginWithEmailAndPassword } from '../../../clients/firebase.auth';
+import { insertSession } from '../../../clients/sqlDataBase';
 import { setUser } from '../../../store/features/userSlice.slice';
 import Link from '../../styledComponents/Link';
 import Loader from '../../styledComponents/Loader';
@@ -29,8 +29,8 @@ const LogIn = ({ email, password, setUserDataHandler, route, navigation }) => {
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false);
   return (
-    <View style={styles.container}>
-      <View style={styles.inputs}>
+    <View onPress={Keyboard.dismiss} style={styles.container} accessible={false}>
+      <View style={styles.inputs} >
         {/* Email input */}
         <TextInputCustom
           label="Email"
@@ -47,13 +47,12 @@ const LogIn = ({ email, password, setUserDataHandler, route, navigation }) => {
         {/* Sign up button */}
         <Button
           title="Log in"
-          onPress={async () => {
+          onPress={async (e) => {
             try {
-
-
               const owner = await loginWithEmailAndPassword(email, password);
               const ownerId = owner.user.uid
               dispatch(setUser({ ownerId }));
+              await insertSession(ownerId)
             } catch (error) {
               console.error(error)
             }
@@ -94,15 +93,16 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     padding: 20,
-    display: 'flex',
-    flexDirection: 'column',
     gap: 10,
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+    display: 'flex',
+    flexDirection: 'column',
   },
   inputs: {
     display: 'flex',
+    zIndex: 10,
     flexDirection: 'column',
     gap: 10,
     width: '80%',

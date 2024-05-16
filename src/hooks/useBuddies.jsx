@@ -11,7 +11,7 @@ const buddyService = BuddyService.getInstance();
  * @param {string} param.ownerId - The ownerId of the buddies to retrieve.
  * @return {Object} An object containing buddies, a function to delete a buddy, and a loading state.
  */
-const useGetBuddies = ({ ownerId }) => {
+const useBuddies = ({ ownerId }) => {
   const [buddies, setBuddies] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -133,4 +133,4 @@ const useGetBuddies = ({ ownerId }) => {
   };
 };
 
-export default useGetBuddies;
+export default useBuddies;

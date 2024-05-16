@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { AUTH } from './firebase.app';
 
 /**
@@ -12,22 +12,23 @@ export const createAccountWithEmailAndPassword = async (
   email,
   password,
 ) => {
-  try {
-    const userCredential = await createUserWithEmailAndPassword(
-      AUTH,
-      email,
-      password,
-    );
-    const { uid } = userCredential.user;
-    return uid;
-  } catch (error) {
-    throw error;
-  }
+  const userCredential = await createUserWithEmailAndPassword(
+    AUTH,
+    email,
+    password,
+  );
+  sendEmailVerification(AUTH.currentUser)
+  const { uid } = userCredential.user;
+  return uid;
 };
 
 
 export const loginWithEmailAndPassword = async (email, password) => {
-
   const userCredential = await signInWithEmailAndPassword(AUTH, email, password)
+  if (!(AUTH.currentUser.emailVerified)) {
+    signOut(AUTH)
+    throw new Error('Email not verified')
+
+  }
   return userCredential
 }

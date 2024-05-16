@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import useGetBuddies from '../../../hooks/useGetBuddies';
+import useBuddies from '../../../hooks/useBuddies';
 import UpdateBuddy from './UpdateBuddy';
 
 
 
 const UpdateBuddiesContainer = ({ closeModal, buddyDataInitialValue }) => {
   const [buddyData, setBuddyData] = useState(buddyDataInitialValue)
-  const { updateBuddy , loading} = useGetBuddies({})
+  const { updateBuddy , loading} = useBuddies({})
   return (
     <UpdateBuddy
       onCreate={async () => {

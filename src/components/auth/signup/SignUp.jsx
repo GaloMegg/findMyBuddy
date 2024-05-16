@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux';
 import { SCREENS_CONSTANTS } from '~/components/navigator/authNavigation/helper.js';
 import { createAccountWithEmailAndPassword } from '../../../clients/firebase.auth';
 import OwnerService from '../../../services/owner.service';
-import { setUser } from '../../../store/features/userSlice.slice';
 import Link from '../../styledComponents/Link';
 import TextInputCustom from '../../styledComponents/TextInputCustom';
 
@@ -74,8 +73,9 @@ const SignUp = ({
                 ownerId: ownerId,
                 phoneNumber: '',
               });
-              console.log(created)
-              dispatch(setUser({ ownerId: created.ownerId }))
+              // console.log(created)
+              // dispatch(setUser({ ownerId: created.ownerId }))
+              navigation.replace(SCREENS_CONSTANTS.LOG_IN);
             } catch (error) {
               console.error(error)
             }

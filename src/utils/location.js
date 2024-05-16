@@ -1,5 +1,6 @@
 import * as Location from 'expo-location';
 import { useEffect, useState } from 'react';
+import LocationService from '../services/location.service';
 const useGetLocation = () => {
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
@@ -24,13 +25,8 @@ const useGetLocation = () => {
      * @return {Promise<location>} A promise that resolves when the current position is successfully retrieved and set.
      */
     const getCurrentPosition = async () => {
-        const status = await requestPermissions();
-        if (status !== 'granted') {
-            setErrorMsg('Permission to access location was denied');
-            return;
-        }
-
-        let location = await Location.getCurrentPositionAsync({});
+        const locationService = LocationService.getInstance()
+        const location = await locationService.getLocation()
         setLocation(location);
         return location
     }
@@ -39,6 +35,6 @@ const useGetLocation = () => {
     useEffect(() => {
         getCurrentPosition();
     }, []);
-    return { location, error, requestPermissions, getCurrentPosition };
+    return { location, errorMsg, requestPermissions, getCurrentPosition };
 }
 export default useGetLocation

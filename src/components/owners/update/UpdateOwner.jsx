@@ -1,8 +1,10 @@
 import { AntDesign } from '@expo/vector-icons';
 import { Button, Modal, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Loader from '../../styledComponents/Loader';
-import { ICONS_MAPPED } from './helper';
+import SelectInputComponent from '../../styledComponents/SelectInputComponent';
+import TextInputCustom from '../../styledComponents/TextInputCustom';
+import { BUDDIES_STATUS_OPTIONS, BUDDIES_TYPE_OPTIONS } from '../helper';
+
 /**
  * Renders a container component for creating buddies.
  *
@@ -10,7 +12,7 @@ import { ICONS_MAPPED } from './helper';
  * @param {function} props.closeModal - The function to close the modal.
  * @return {JSX.Element} The rendered container component.
  */
-const DeleteBuddy = ({ loading, closeModal, buddyData, onDelete }) => {
+const UpdateBuddy = ({ loading, closeModal, buddyData, setbuddyData, onCreate }) => {
     if (loading) return <Modal>
         <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
             <Loader />
@@ -30,36 +32,31 @@ const DeleteBuddy = ({ loading, closeModal, buddyData, onDelete }) => {
                 <ScrollView contentContainerStyle={{ gap: 10, alignItems: 'center', justifyContent: 'center', height: '100%' }}
                     style={{ width: '100%', }}>
 
-                    <Text style={{ fontSize: 20 }}>Delete a buddy</Text>
-                    <View>
-                        <Text>Are you sure you want to delete <Text style={{ fontWeight: 'bold' }}>{buddyData.name}
-                        </Text>?</Text>
-                        <View style={{ gap: 10, flexDirection: 'row', padding: 10, justifyContent: 'center' }}>
-                            <View style={{ gap: 10, flexDirection: 'row', padding: 10, alignItems: 'center', justifyContent: 'center' }}>
-                                <Text>Type:</Text>
-                                <Icon name={ICONS_MAPPED[buddyData.type]} style={{
-                                    fontSize: 28,
-                                    marginRight: 8,
-                                }} />
-                            </View>
-                            <View style={{ gap: 10, flexDirection: 'row', padding: 10, justifyContent: 'center', alignItems: 'center' }}>
-                                <Text>Status:</Text>
-                                <Icon name={ICONS_MAPPED[buddyData.status]} style={{
-                                    fontSize: 28,
-                                    marginRight: 8,
-                                }} />
-                            </View>
-                        </View>
+                    <Text style={{ fontSize: 20 }}>Create a new buddy</Text>
+                    <View style={{
+                        gap: 10,
+                        width: '100%',
+                        alignItems: 'center',
+                        paddingHorizontal: '10%',
+                    }}>
+                        <TextInputCustom
+                            label="Name"
+                            value={buddyData.name}
+                            onChangeText={(item) => setbuddyData({ ...buddyData, name: item })}
+                        />
+                        <SelectInputComponent label='Type' value={buddyData.type} options={BUDDIES_TYPE_OPTIONS} onSelect={item => setbuddyData({ ...buddyData, type: item.title.toUpperCase() })} />
+                        <SelectInputComponent label='Status' options={BUDDIES_STATUS_OPTIONS} value={buddyData.status} onSelect={item => setbuddyData({ ...buddyData, status: item.title.toUpperCase() })} />
                     </View>
                     <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'center' }}>
                         <Button title='Cancel' onPress={closeModal} />
-                        <Button title='Delete' onPress={onDelete} />
+                        <Button title='Update' onPress={onCreate} />
                     </View>
                 </ScrollView>
 
             </SafeAreaView>
+
         </Modal >
     )
 }
-export default DeleteBuddy
+export default UpdateBuddy
 const styles = StyleSheet.create({})

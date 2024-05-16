@@ -1,6 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux';
+import useGetCurrentUser from '../../hooks/useGetCurrentUser';
 import AppNavigation from './appNavigation/AppNavigation';
 import AuthNavigation from './authNavigation/AuthNavigation';
 
@@ -11,8 +11,7 @@ import AuthNavigation from './authNavigation/AuthNavigation';
  * @return {JSX.Element} The rendered navigator component.
  */
 const Navigator = () => {
-  const { ownerId } = useSelector(state => state.user)
-
+  const { ownerId } = useGetCurrentUser()
   return (
     <NavigationContainer>{
       ownerId ?

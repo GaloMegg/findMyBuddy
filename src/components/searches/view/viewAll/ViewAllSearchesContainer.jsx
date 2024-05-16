@@ -1,24 +1,23 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import useBuddies from '~/hooks/useBuddies'
 import useGetCurrentUser from '../../../../hooks/useGetCurrentUser'
+import useSearches from '../../../../hooks/useSearches'
 import Loader from '../../../styledComponents/Loader'
-import ViewAllBuddies from './ViewAllBuddies'
+import ViewAllSearches from './ViewAllSearches'
 
 /**
- * Renders the ViewAllBuddiesContainer component.
+ * Renders the ViewAllSearchesContainer component.
  *
  * @param {object} props - The props object.
- * @return {JSX.Element} The rendered ViewAllBuddiesContainer component.
+ * @return {JSX.Element} The rendered ViewAllSearchesContainer component.
  */
-const ViewAllBuddiesContainer = ({ navigation }) => {
+const ViewAllSearchesContainer = ({ navigation }) => {
   const { ownerId } = useGetCurrentUser()
 
 
-  const { buddies, getAllBuddies, loading } = useBuddies({
-    ownerId,
-  })
+  const { getAllSearches, loading, searches } = useSearches()
+  // console.log('searches', searches)
   if (loading)
     return (
       <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -26,15 +25,15 @@ const ViewAllBuddiesContainer = ({ navigation }) => {
       </SafeAreaView>
     )
   return <SafeAreaView >
-    <ViewAllBuddies
+    <ViewAllSearches
       loading={loading}
       ownerId={ownerId}
-      getAllBuddies={getAllBuddies}
-      buddies={buddies}
-      navigation={navigation} />
+      getAllSearches={getAllSearches}
+      searches={searches}
+       />
   </SafeAreaView>
 }
 
-export default ViewAllBuddiesContainer
+export default ViewAllSearchesContainer
 
 const styles = StyleSheet.create({})
