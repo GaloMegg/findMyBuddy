@@ -89,7 +89,6 @@ export default class BuddyDA {
   async deleteBuddy(ownerId, buddyId) {
     // Construct a reference to the buddy document
     const buddyRef = doc(DB, 'buddies', buddyId);
-
     try {
       // Retrieve the buddy document to ensure it exists and belongs to the owner
       const buddySnapshot = await getDoc(buddyRef);
@@ -98,12 +97,8 @@ export default class BuddyDA {
       if (buddySnapshot.exists() && buddySnapshot.data().ownerId === ownerId) {
         // Delete the buddy document
         await deleteDoc(buddyRef);
-        console.log('Buddy document successfully deleted.');
-      } else {
-        console.log('Buddy document not found or does not belong to the owner.');
       }
     } catch (error) {
-      console.error('Error deleting buddy document:', error);
       throw error;
     }
   }
@@ -129,9 +124,6 @@ export default class BuddyDA {
         const updatedData = { ...buddySnapshot.data(), ...newData };
         // Update the buddy document with the merged data
         await setDoc(buddyRef, updatedData);
-        console.log('Buddy document successfully updated.');
-      } else {
-        console.log('Buddy document not found or does not belong to the owner.');
       }
     } catch (error) {
       console.error('Error updating buddy document:', error);

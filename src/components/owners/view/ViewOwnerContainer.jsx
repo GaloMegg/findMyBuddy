@@ -1,21 +1,20 @@
 import { SafeAreaView, StyleSheet } from 'react-native'
-import { AUTH } from '../../../clients/firebase.app'
+import useGetCurrentUser from '../../../hooks/useGetCurrentUser'
 import useOwners from '../../../hooks/useOwner'
 import Loader from '../../styledComponents/Loader'
 import ViewOwner from './ViewOwner'
 const ViewOwnerContainer = () => {
+    const { ownerId, logOut } = useGetCurrentUser()
+    const { loading, findOne, owner, } = useOwners({ ownerId })
 
-    const { loading, findOne, owner } = useOwners({ ownerId: AUTH.currentUser.uid })
 
-    console.log(owner)
-  
     if (loading) return <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
         <Loader />
     </SafeAreaView>
 
     return (
         <SafeAreaView>
-            <ViewOwner owner={owner} />
+            <ViewOwner owner={owner} logOut={logOut} />
         </SafeAreaView>
     )
 }

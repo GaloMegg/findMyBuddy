@@ -6,7 +6,9 @@ import {
   Vibration,
   View
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Card from '~/components/styledComponents/Card';
+
 /**
  * Renders a View displaying all the searches.
  *
@@ -29,9 +31,7 @@ const ViewAllSearches = ({ searches, ownerId, getAllSearches, loading }) => {
           columnWrapperStyle={{ gap: 10, justifyContent: 'space-around', flexDirection: 'row', width: '100%', }}
 
           renderItem={({ item }) => {
-            console.log(item)
             return (
-
               <Card>
                 <View
                   style={{
@@ -44,14 +44,19 @@ const ViewAllSearches = ({ searches, ownerId, getAllSearches, loading }) => {
                 >
                   <View>
                     <Text>Name: {item.name}</Text>
-                    <Text>Status: {item.status}</Text>
-                    <Text>Type: {item.type}</Text>
-                  </View>
 
+                    <View style={{ flexDirection: 'row', gap: 1, alignItems: 'center' }}>
+                      <Text>Status:</Text>
+                      <Icon name={item.status.toLowerCase() == 'LOST' ? 'alert' : 'home'} size={24} color="#000" />
+                    </View>
+
+                    <View style={{ flexDirection: 'row', gap: 1, alignItems: 'center' }}>
+                      <Text>Type:</Text>
+                      <Icon name={item.type.toLowerCase()} size={24} color="#000" />
+                    </View>
+                  </View>
                 </View>
               </Card>
-
-
             )
           }}
           data={searches}
@@ -70,6 +75,6 @@ const ViewAllSearches = ({ searches, ownerId, getAllSearches, loading }) => {
 export default ViewAllSearches
 
 const styles = StyleSheet.create({
-  noItemsAddButton: { width: '100%', height: '100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10 }
+
 })
 

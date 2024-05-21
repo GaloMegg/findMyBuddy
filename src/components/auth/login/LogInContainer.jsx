@@ -1,4 +1,5 @@
 import React from 'react';
+import { SafeAreaView } from 'react-native';
 import LogIn from './LogIn';
 import useUserData from './useUserData';
 
@@ -10,12 +11,14 @@ import useUserData from './useUserData';
 const LogInContainer = ({ route, navigation }) => {
   const { userData, setUserDataHandler } = useUserData();
   return (
-    <LogIn
-      {...userData}
-      setUserDataHandler={setUserDataHandler}
-      route={route}
-      navigation={navigation}
-    />
+    <SafeAreaView>
+      <LogIn
+        {...userData}
+        setUserDataHandler={setUserDataHandler}
+        route={route}
+        navigation={navigation}
+      />
+    </SafeAreaView>
   );
 };
 

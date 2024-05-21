@@ -4,7 +4,7 @@
 'Find My Buddy' is a React Native app designed to help pet owners create profiles for their pets and notify nearby users in case their pet is lost. The app provides a platform for users to register their pets with detailed information including images, descriptions, and contact details. In the unfortunate event that a pet goes missing, the owner can quickly label it as lost within the app, triggering notifications to nearby users who can assist in the search.
 
 ## Features:
-1. **Profile Creation:** Users can create profiles for their pets by providing information such as name, age, color, distinctive markings, and contact details.
+1. **Profile Creation:** Users can create profiles for their pets by providing information such as name, age, color and distinctive markings.
 2. **Lost Pet Alert:** Owners can mark their pets as lost with a single tap, triggering alerts to nearby users who have the PetFinder app installed.
 3. **Map Integration:** The app utilizes maps to display the location of lost pets and provide directions to users who want to assist in the search.
 4. **Search Filters:** Users can filter lost pet alerts based on location, species, and other relevant criteria to narrow down their search.

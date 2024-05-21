@@ -5,19 +5,19 @@ import ViewAllSearchesContainer from '../../searches/view/viewAll/ViewAllSearche
 
 export const APP_NAVIGATION = [
     {
-        name: 'Home',
+        name: 'Searches',
         component: ViewAllSearchesContainer,
-        icon: <Entypo name="home" size={24} color="black" />
+        icon: (color) => <Entypo name="home" size={24} color={color} />
     },
     {
         name: 'Buddies',
         component: ViewAllBuddiesContainer,
-        icon: <MaterialIcons name="pets" size={24} color="black" />
+        icon: (color) => <MaterialIcons name="pets" size={24} color={color} />
     },
     {
         name: 'Profile',
         component: ViewOwnerContainer,
-        icon: <Ionicons name="person" size={24} color="black" />
+        icon: (color) => <Ionicons name="person" size={24} color={color} />
     },
 
 ]

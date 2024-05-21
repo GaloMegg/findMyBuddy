@@ -31,7 +31,6 @@ const useSearches = () => {
       const location = await locationService.getLocation();
       const searchService = SearchService.getInstance();
       const result = await searchService.findAll(location.latitude, location.longitude);
-      console.log(result, 'result')
       setSearches(result);
     } catch (error) {
       console.error(error)
@@ -55,7 +54,6 @@ const useSearches = () => {
    */
   const createSearch = async (buddyData) => {
     setLoading(true)
-    console.log(buddyData)
     try {
       if (!buddyData.name || !buddyData.type || !buddyData.status) { throw new Error('Missing buddy data') }
       const searchId = uuid.v4();

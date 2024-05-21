@@ -1,9 +1,11 @@
-import React from 'react';
-import { Button, StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { SCREENS_CONSTANTS } from '~/components/navigator/authNavigation/helper.js';
 import { createAccountWithEmailAndPassword } from '../../../clients/firebase.auth';
 import OwnerService from '../../../services/owner.service';
+import { COLORS, LOGIN_IMAGE } from '../../../utils/constants';
+import ActionButton from '../../styledComponents/ActionButton';
 import Link from '../../styledComponents/Link';
 import TextInputCustom from '../../styledComponents/TextInputCustom';
 
@@ -27,63 +29,75 @@ const SignUp = ({
   name,
   email,
   password,
+  phoneNumber,
   setUserDataHandler,
-  route,
   navigation,
 }) => {
   const dispatch = useDispatch()
+  const [errors, setErrors] = useState({})
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }} automaticallyAdjustKeyboardInsets>
       <View style={styles.inputs}>
+        <Image style={{ width: 200, height: 200 }} source={{ uri: LOGIN_IMAGE }} />
 
         {/* Name input */}
         <TextInputCustom
           label="Name"
           onChangeText={(text) => setUserDataHandler('name', text)}
           value={name}
+          error={errors['name']}
+        />
+        <TextInputCustom
+          label="Phone number"
+          value={phoneNumber}
+          onChangeText={(text) => setUserDataHandler('phoneNumber', text)}
+          error={errors['phoneNumber']}
         />
         {/* Email input */}
         <TextInputCustom
           label="Email"
           value={email}
           onChangeText={(text) => setUserDataHandler('email', text)}
+          error={errors['email']}
         />
+
         {/* Password input */}
         <TextInputCustom
           label="Password"
           onChangeText={(text) => setUserDataHandler('password', text)}
+          error={errors['password']}
           secureTextEntry={true}
           value={password}
         />
         {/* Sign up button */}
-        <Button
-          title="Sign Up"
+
+        <ActionButton
+          text={'Sign Up'}
           onPress={async () => {
             try {
+
               const ownerId = await createAccountWithEmailAndPassword(
                 email,
-                password
+                password,
+                phoneNumber,
+                name
               );
-              console.log(ownerId)
               const ownerService = OwnerService.getInstance();
-              const created = await ownerService.create(ownerId, {
+              await ownerService.create(ownerId, {
                 name,
                 email,
                 location: { latitude: 0, longitude: 0 },
                 ownerId: ownerId,
                 phoneNumber: '',
               });
-              // console.log(created)
-              // dispatch(setUser({ ownerId: created.ownerId }))
               navigation.replace(SCREENS_CONSTANTS.LOG_IN);
-            } catch (error) {
-              console.error(error)
+            } catch (errors) {
+              console.log(errors)
+              setErrors(errors);
             }
           }}
-        />
-      </View>
-
-      <View>
+        >
+        </ActionButton>
         <Link
           onPress={() => {
             navigation.replace(SCREENS_CONSTANTS.LOG_IN);
@@ -92,7 +106,8 @@ const SignUp = ({
           Already have an account?
         </Link>
       </View>
-    </View>
+
+    </ScrollView>
   );
 };
 
@@ -100,19 +115,15 @@ export default SignUp;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
-    padding: 20,
+    backgroundColor: COLORS.WHITE,
     display: 'flex',
-    flexDirection: 'column',
-    gap: 10,
     height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   inputs: {
     display: 'flex',
     flexDirection: 'column',
-    gap: 10,
+    alignItems: 'center',
+    gap: 15,
     width: '80%',
   }
 });

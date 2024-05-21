@@ -1,13 +1,13 @@
-import { AntDesign } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { Button, Keyboard, Pressable, StyleSheet, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { SCREENS_CONSTANTS } from '~/components/navigator/authNavigation/helper.js';
 import { loginWithEmailAndPassword } from '../../../clients/firebase.auth';
 import { insertSession } from '../../../clients/sqlDataBase';
 import { setUser } from '../../../store/features/userSlice.slice';
+import { COLORS, LOGIN_IMAGE } from '../../../utils/constants';
+import ActionButton from '../../styledComponents/ActionButton';
 import Link from '../../styledComponents/Link';
-import Loader from '../../styledComponents/Loader';
 import TextInputCustom from '../../styledComponents/TextInputCustom';
 /**
  * Component for rendering a sign-up form.
@@ -26,16 +26,26 @@ import TextInputCustom from '../../styledComponents/TextInputCustom';
  * @return {JSX.Element} The sign-up form component
  */
 const LogIn = ({ email, password, setUserDataHandler, route, navigation }) => {
+  const [errors, setErrors] = useState({})
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false);
   return (
-    <View onPress={Keyboard.dismiss} style={styles.container} accessible={false}>
+    <ScrollView automaticallyAdjustKeyboardInsets style={styles.container} accessible={false} contentContainerStyle={{
+      alignItems: 'center',
+      justifyContent: 'center',
+      display: 'flex',
+      gap: 10
+    }}>
+      <Image style={{ width: 200, height: 200 }} source={{ uri: LOGIN_IMAGE }} />
+      
       <View style={styles.inputs} >
         {/* Email input */}
         <TextInputCustom
           label="Email"
           value={email}
           onChangeText={(text) => setUserDataHandler('email', text)}
+          error={errors['email']}
+
         />
         {/* Password input */}
         <TextInputCustom
@@ -43,47 +53,39 @@ const LogIn = ({ email, password, setUserDataHandler, route, navigation }) => {
           onChangeText={(text) => setUserDataHandler('password', text)}
           secureTextEntry={true}
           value={password}
+          error={errors['password']}
         />
         {/* Sign up button */}
-        <Button
-          title="Log in"
-          onPress={async (e) => {
-            try {
-              const owner = await loginWithEmailAndPassword(email, password);
-              const ownerId = owner.user.uid
-              dispatch(setUser({ ownerId }));
-              await insertSession(ownerId)
-            } catch (error) {
-              console.error(error)
-            }
-          }}
-        />
+        <View style={{ width: '80%', display: 'flex', flexDirection: 'row', gap: 10 }}>
+
+          <ActionButton
+            text={'Log in'}
+            onPress={async (e) => {
+              try {
+                const owner = await loginWithEmailAndPassword(email, password);
+                const ownerId = owner.user.uid
+                dispatch(setUser({ ownerId }));
+                await insertSession(ownerId)
+              } catch (error) {
+                console.log(error)
+                setErrors(error)
+              }
+            }}
+          >
+
+          </ActionButton>
+        </View>
+
       </View>
-      <View style={{ flexDirection: 'row', gap: 10 }}>
-        {['facebook-square', 'google'].map((provider) => {
-          if (loading && loading == provider) return <Loader />;
-          return (
-            <Pressable
-              key={provider}
-              onPress={() => {
-                setLoading(provider);
-              }}
-            >
-              <AntDesign name={provider} size={24} color="black" style={{}} />
-            </Pressable>
-          );
-        })}
-      </View>
-      <View>
-        <Link
-          onPress={() => {
-            navigation.replace(SCREENS_CONSTANTS.SIGN_UP);
-          }}
-        >
-          Don't have an account?
-        </Link>
-      </View>
-    </View>
+
+      <Link
+        onPress={() => {
+          navigation.replace(SCREENS_CONSTANTS.SIGN_UP);
+        }}
+      >
+        Don't have an account?
+      </Link>
+    </ScrollView>
   );
 };
 
@@ -91,20 +93,18 @@ export default LogIn;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
-    padding: 20,
-    gap: 10,
     height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: COLORS.WHITE,
     display: 'flex',
     flexDirection: 'column',
   },
   inputs: {
     display: 'flex',
     zIndex: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
     flexDirection: 'column',
-    gap: 10,
+    gap: 15,
     width: '80%',
   }
 });

@@ -2,6 +2,7 @@ import { AntDesign } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {
   FlatList,
+  Image,
   StyleSheet,
   Text,
   Vibration,
@@ -93,7 +94,6 @@ const ViewAllBuddies = ({ buddies, ownerId, navigation, getAllBuddies, loading }
           columnWrapperStyle={{ gap: 10, justifyContent: 'space-around', flexDirection: 'row', width: '100%', }}
 
           renderItem={({ item }) => {
-            console.log(item)
             return (
               <Swipeable renderRightActions={() => RenderRightActions(item)
               }
@@ -103,12 +103,14 @@ const ViewAllBuddies = ({ buddies, ownerId, navigation, getAllBuddies, loading }
                   <View
                     style={{
                       flexDirection: 'row',
-                      width: '60%',
+                      width: 150,
                       alignItems: 'center',
-                      justifyContent: 'space-around',
+                      justifyContent: 'space-evenly',
                       height: '100%'
                     }}
                   >
+
+                    <Image source={{ uri: item.image }} style={{ width: 50, height: 50, borderRadius: 25 }} />
                     <View>
                       <Text>Name: {item.name}</Text>
                       <Text>Status: {item.status}</Text>

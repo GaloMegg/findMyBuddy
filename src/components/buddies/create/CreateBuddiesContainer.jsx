@@ -1,20 +1,19 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import useBuddies from '../../../hooks/useBuddies';
+import useGetCurrentUser from '../../../hooks/useGetCurrentUser';
 import CreateBuddy from './CreateBuddy';
 
 
 
 const CreateBuddiesContainer = ({ closeModal }) => {
-  const { ownerId } = useSelector(state => state.user)
-  const { createBuddy, loading } = useBuddies({})
+  const { ownerId } = useGetCurrentUser()
+  const { createBuddy, loading, errors } = useBuddies({})
   const [buddyData, setBuddyData] = useState({
     ownerId,
     name: '',
     type: '',
     status: '',
   })
-
   return (
     <CreateBuddy
       onCreate={async () => {
@@ -22,6 +21,7 @@ const CreateBuddiesContainer = ({ closeModal }) => {
         closeModal();
       }}
       loading={loading}
+      errors={errors}
       closeModal={closeModal}
       buddyData={buddyData}
       setbuddyData={setBuddyData}

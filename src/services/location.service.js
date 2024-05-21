@@ -56,7 +56,6 @@ export default class LocationService {
         try {
             await this.requestLocationPermission()
             let location = await Location.reverseGeocodeAsync({ latitude, longitude });
-            console.log(location[0])
             return location[0]
             // {"city": "Buenos Aires", "country": "Argentina", "district": "Comuna 2", "isoCountryCode": "AR", "name": "Avenida Córdoba 2077", "postalCode": "C1120", "region": "CABA", "street": "Avenida Córdoba", "streetNumber": "2077", "subregion": null, "timezone": "America/Argentina/Buenos_Aires"}
         } catch (error) {

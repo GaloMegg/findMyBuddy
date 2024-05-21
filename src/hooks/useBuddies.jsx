@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import uuid from 'react-native-uuid';
+import { Toast } from 'toastify-react-native';
 import BuddyService from '~/services/buddy.service';
 
 
@@ -14,7 +15,7 @@ const buddyService = BuddyService.getInstance();
 const useBuddies = ({ ownerId }) => {
   const [buddies, setBuddies] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [errors, setErrors] = useState({})
   /**
    * Retrieves all buddies for a given owner ID.
    *
@@ -22,7 +23,6 @@ const useBuddies = ({ ownerId }) => {
    * @return {Promise<void>} - A promise that resolves when the operation is complete.
    */
   const getAllBuddies = async (ownerId, where) => {
-
     try {
       setLoading(true);
       const result = await buddyService.findAll(ownerId);
@@ -44,8 +44,12 @@ const useBuddies = ({ ownerId }) => {
   const deleteBuddy = async (buddyData) => {
     setLoading(true)
     try {
-      if (!buddyData.name || !buddyData.type || !buddyData.status) { throw new Error('Missing buddy data') }
+      if (!buddyData.name || !buddyData.type || !buddyData.status) {
+        throw new Error('Missing buddy data')
+      }
       result = await buddyService.delete(buddyData.ownerId, buddyData.buddyId)
+      Toast.success('Deleted')
+      return result
     } catch (error) {
       console.error(error)
       throw error
@@ -70,8 +74,9 @@ const useBuddies = ({ ownerId }) => {
   const updateBuddy = async (buddyData) => {
     setLoading(true)
     try {
-      if (!buddyData.name || !buddyData.type || !buddyData.status) { throw new Error('Missing buddy data') }
       result = await buddyService.update(buddyData.ownerId, buddyData.buddyId, buddyData)
+      Toast.success('Updated')
+
     } catch (error) {
       console.error(error)
       throw error
@@ -97,11 +102,12 @@ const useBuddies = ({ ownerId }) => {
   const createBuddy = async (buddyData) => {
     setLoading(true)
     try {
-      if (!buddyData.name || !buddyData.type || !buddyData.status) { throw new Error('Missing buddy data') }
+      validateBuddy(buddyData)
       const buddyId = uuid.v4();
       result = await buddyService.create(buddyId, buddyData)
+      Toast.success('Created')
     } catch (error) {
-      console.error(error)
+      setErrors(error)
       throw error
     }
     finally {
@@ -112,7 +118,7 @@ const useBuddies = ({ ownerId }) => {
   useEffect(() => {
     setLoading(true);
     if (ownerId) {
-      getAllBuddies(ownerId, 'hook');
+      getAllBuddies(ownerId);
     } else {
       setLoading(false)
     }
@@ -129,8 +135,23 @@ const useBuddies = ({ ownerId }) => {
     deleteBuddy,
     getAllBuddies,
     updateBuddy,
+    errors,
     loading,
   };
 };
 
 export default useBuddies;
+
+const validateBuddy = (buddyData) => {
+  const errors = {}
+  if (!buddyData.name) {
+    errors.name = 'Required'
+  }
+  if (!buddyData.type) {
+    errors.type = 'Required'
+  }
+  if (!buddyData.age) {
+    errors.age = 'Required'
+  }
+  if (Object.keys(errors).length) { throw errors }
+}

@@ -1,16 +1,16 @@
 import { StyleSheet, Text, View } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import TextError from './TextError';
 
-const SelectInputComponent = ({ options, label, onSelect, value }) => {
-    console.log(options.findIndex(o => o.value == value))
+const SelectInputComponent = ({ options, label, onSelect, value, error }) => {
     return (
         <View style={styles.container}>
             <Text style={styles.label}>
                 {label}
             </Text>
             <SelectDropdown
-                defaultValueByIndex={value ? options.findIndex(o => o.value == value):undefined}
+                defaultValueByIndex={value ? options.findIndex(o => o.value == value) : undefined}
                 data={options}
                 onSelect={(selectedItem, index) => {
                     onSelect(selectedItem, index)
@@ -39,6 +39,7 @@ const SelectInputComponent = ({ options, label, onSelect, value }) => {
                 showsVerticalScrollIndicator={false}
                 dropdownStyle={styles.dropdownMenuStyle}
             />
+            <TextError text={error} />
         </View>
 
     )

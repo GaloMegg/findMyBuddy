@@ -1,7 +1,5 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
-import { COLORS } from '../../utils/constants';
-import TextError from './TextError';
 
 
 /**
@@ -14,49 +12,48 @@ import TextError from './TextError';
  * @param  {string} value: (optional) The initial value of the input.
  * @return {JSX.Element} The rendered custom text input component.
  */
-const TextInputCustom = ({
+const TextAreaCustom = ({
   label,
   onChangeText,
   secureTextEntry = false,
   value,
-  error
 }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
       <TextInput
+        multiline={true}
+        numberOfLines={4}
         onChangeText={onChangeText}
         secureTextEntry={secureTextEntry}
         style={styles.input}
         value={value}
       />
-      <TextError text={error} />
     </View>
   );
 };
 
-export default TextInputCustom;
+export default TextAreaCustom;
 
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'column',
+    gap: 10,
     width: '100%',
   },
   label: {
-    marginBottom: 5,
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '500',
   },
   input: {
-    marginBottom: 1,
-    borderWidth: 1.5,
-    borderColor: COLORS.DARK_BROWN,
+    borderWidth: 1,
+    borderColor: 'black',
     width: '100%',
     borderRadius: 8,
     padding: 8,
     fontSize: 18,
     fontWeight: '500',
-    height: 40,
+    height: 80,
   },
 });

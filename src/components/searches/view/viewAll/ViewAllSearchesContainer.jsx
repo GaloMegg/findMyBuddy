@@ -14,23 +14,20 @@ import ViewAllSearches from './ViewAllSearches'
  */
 const ViewAllSearchesContainer = ({ navigation }) => {
   const { ownerId } = useGetCurrentUser()
-
-
   const { getAllSearches, loading, searches } = useSearches()
-  // console.log('searches', searches)
   if (loading)
     return (
       <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Loader />
       </SafeAreaView>
     )
-  return <SafeAreaView >
+  return <SafeAreaView>
     <ViewAllSearches
       loading={loading}
       ownerId={ownerId}
       getAllSearches={getAllSearches}
       searches={searches}
-       />
+    />
   </SafeAreaView>
 }
 

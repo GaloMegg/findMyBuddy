@@ -15,14 +15,13 @@ export default function useGetImagePicker() {
                 mediaTypes: ImagePicker.MediaTypeOptions.All,
                 allowsEditing: true,
                 aspect: [4, 3],
-                quality: 0.5,
+                quality: 0.2,
                 base64: true
             });
-            console.log(result)
             if (!result.cancelled) {
                 setSelectedImage('data:image/jpeg;base64,' + result.assets[0].base64);
             }
-            return
+            return 'data:image/jpeg;base64,' + result.assets[0].base64
         } catch (error) {
             console.error(error)
         }

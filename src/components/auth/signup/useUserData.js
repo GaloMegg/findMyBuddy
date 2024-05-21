@@ -11,6 +11,7 @@ const useUserData = () => {
     name: '',
     email: '',
     password: '',
+    phoneNumber: '',
   });
   /**
    * Set user data handler function.

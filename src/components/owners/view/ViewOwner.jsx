@@ -1,11 +1,27 @@
 import { Entypo, FontAwesome, MaterialIcons, Octicons } from '@expo/vector-icons';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { AUTH } from '../../../clients/firebase.app';
+import EditButton from '../../styledComponents/EditButton';
+import SignOutIcon from '../../styledComponents/SignOutIcon';
 // {"email": "Galomeggiolarobul@gmail.com", "location": {"latitude": 0, "longitude": 0}, "name": "Gaño prueba", "ownerId": "55TmD9uRKQWzwtOq1aJr2i9TW8O2", "phoneNumber": "", profilePicture:''}
-const ViewOwner = ({ owner }) => {
-    console.log(AUTH.currentUser)
+const ViewOwner = ({ owner, logOut }) => {
+    const [editOwners, setEditOwners] = useState(false)
+
     return (
         <View style={{ alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+
+            <SafeAreaView style={{
+                flexDirection: 'row', justifyContent: 'flex-end', width: '100%',
+                alignItems: 'center',
+                paddingHorizontal: 10,
+                marginBottom: 10,
+                gap: 10
+            }}>
+                <EditButton onPress={() => setEditOwners(true)} />
+
+                <SignOutIcon onPress={async () => await logOut(true)} />
+            </SafeAreaView>
             {owner.profilePicture
                 ?
                 <Image

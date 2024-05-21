@@ -127,9 +127,6 @@ export default class SearchDA {
       if (buddySnapshot.exists() && buddySnapshot.data().ownerId === ownerId) {
         // Delete the buddy document
         await deleteDoc(buddyRef);
-        console.log('Buddy document successfully deleted.');
-      } else {
-        console.log('Buddy document not found or does not belong to the owner.');
       }
     } catch (error) {
       console.error('Error deleting buddy document:', error);
@@ -158,10 +155,7 @@ export default class SearchDA {
         const updatedData = { ...buddySnapshot.data(), ...newData };
         // Update the buddy document with the merged data
         await setDoc(buddyRef, updatedData);
-        console.log('Buddy document successfully updated.');
-      } else {
-        console.log('Buddy document not found or does not belong to the owner.');
-      }
+      } 
     } catch (error) {
       console.error('Error updating buddy document:', error);
     }

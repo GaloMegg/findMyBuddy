@@ -16,7 +16,6 @@ const setupDatabase = async () => {
 
 // Insert a new session with provided tokenId
 const insertSession = (tokenId) => {
-    console.log('insertSession', tokenId)
     const promise = new Promise((resolve, reject) => {
         db.transaction(tx => {
             tx.executeSql(
@@ -60,7 +59,6 @@ const deleteSession = () => {
             )
         })
     })
-    console.log("will return promise")
     return promise
 };
 
