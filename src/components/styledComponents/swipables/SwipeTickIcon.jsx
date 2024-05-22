@@ -1,4 +1,4 @@
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Pressable, StyleSheet } from 'react-native';
 import { COLORS } from '../../../utils/constants';
 const SwipeTickIcon = ({ onPress }) => {
@@ -12,7 +12,9 @@ const SwipeTickIcon = ({ onPress }) => {
                 styles.container
             ]}
         >
-            <MaterialIcons name="edit" size={24} color="white" />
+            <MaterialCommunityIcons name="shield-search" size={24} color="white" />
+
+
         </Pressable>
     )
 }
@@ -20,13 +22,13 @@ export default SwipeTickIcon
 
 const styles = StyleSheet.create({
     container: {
-        borderBottomRightRadius: 17,
-        borderTopRightRadius: 17,
+        borderBottomLeftRadius: 17,
+        borderTopLeftRadius: 17,
         alignItems: 'center',
         flexDirection: 'row',
         gap: 10,
-        height: '100%',
+        height: '88%',
         justifyContent: 'center',
-        width: '50%',
+        width: '100%',
     }
 })

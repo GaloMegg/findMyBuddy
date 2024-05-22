@@ -11,7 +11,7 @@ import CloseButton from '../../styledComponents/CloseButton';
  * @param {function} props.closeModal - The function to close the modal.
  * @return {JSX.Element} The rendered container component.
  */
-const LostBuddy = ({ loading, closeModal, onLabelAsLost }) => {
+const FoundBuddy = ({ loading, closeModal, onLabelAsSafe }) => {
 
     return (
         <Modal animationType='slide'
@@ -29,11 +29,11 @@ const LostBuddy = ({ loading, closeModal, onLabelAsLost }) => {
                     }}>
 
                         <Text>Are you sure you want to label this buddy as </Text><Text style={{ fontWeight: 'bold' }}>
-                            LOST
+                            SAFE
                         </Text>
                         <Text>?</Text>
                     </View>
-
+                    <Text>This action will delete all the active searches</Text>
                     <View style={styles.buttonContainer}>
                         <View style={styles.buttonContainer.button}>
                             <CancelButton text='No' onPress={closeModal} />
@@ -41,7 +41,7 @@ const LostBuddy = ({ loading, closeModal, onLabelAsLost }) => {
                         <View style={styles.buttonContainer.button}>
                             <ActionButton loading={loading}
                                 disabled={loading}
-                                text='Yes' onPress={onLabelAsLost} />
+                                text='Yes' onPress={onLabelAsSafe} />
                         </View>
                     </View>
 
@@ -52,7 +52,7 @@ const LostBuddy = ({ loading, closeModal, onLabelAsLost }) => {
         </Modal >
     )
 }
-export default LostBuddy
+export default FoundBuddy
 const styles = StyleSheet.create({
     modal: {
         width: '100%',

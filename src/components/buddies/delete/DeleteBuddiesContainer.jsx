@@ -2,13 +2,13 @@ import useBuddies from '../../../hooks/useBuddies';
 import DeleteBuddy from './DeleteBuddy';
 
 const DeleteBuddiesContainer = ({ closeModal, buddyData }) => {
-  const { deleteBuddy, loading } = useBuddies({})
+  const { deleteBuddy, deleteBuddyLoading } = useBuddies({})
   return (
     <DeleteBuddy
       onDelete={async () => {
         await deleteBuddy(buddyData, closeModal);
       }}
-      loading={loading}
+      loading={deleteBuddyLoading}
       buddyData={buddyData}
       closeModal={closeModal}
     />

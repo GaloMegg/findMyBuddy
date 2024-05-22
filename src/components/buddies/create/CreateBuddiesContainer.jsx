@@ -7,7 +7,7 @@ import CreateBuddy from './CreateBuddy';
 
 const CreateBuddiesContainer = ({ closeModal }) => {
   const { ownerId } = useGetCurrentUser()
-  const { createBuddy, loading, errors } = useBuddies({})
+  const { createBuddy, createBuddyLoading, errors } = useBuddies({})
   const [buddyData, setBuddyData] = useState({
     ownerId,
     name: '',
@@ -19,7 +19,7 @@ const CreateBuddiesContainer = ({ closeModal }) => {
       onCreate={async () => {
         await createBuddy(buddyData, closeModal);
       }}
-      loading={loading}
+      loading={createBuddyLoading}
       errors={errors}
       closeModal={closeModal}
       buddyData={buddyData}

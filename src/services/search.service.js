@@ -57,10 +57,20 @@ export default class SearchService {
    * @param {string} buddyId - The ID of the buddy document to delete.
    * @return {Promise<void>} A promise that resolves once the deletion is complete.
    */
-  async delete(ownerId, buddyId) {
-    return await this.SearchDA.deleteBuddy(ownerId, buddyId);
+  async deleteSearchbyBuddyId(buddyId) {
+    return await this.SearchDA.deleteSearchbyBuddyId(buddyId);
   }
 
+  /**
+   * Deletes a buddy document from the database based on owner ID and buddy ID.
+   *
+   * @param {string} ownerId - The ID of the owner.
+   * @param {string} buddyId - The ID of the buddy document to delete.
+   * @return {Promise<void>} A promise that resolves once the deletion is complete.
+   */
+  async deleteSearchbyId(searchId) {
+    return await this.SearchDA.deleteSearchbyId(searchId);
+  }
   /**
    * Updates a buddy document in the database.
    *

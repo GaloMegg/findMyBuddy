@@ -28,7 +28,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         gap: 10,
         // marginLeft: '50%',
-        height: '100%',
+        height: '88%',
+
         width: '50%'
     }
 })

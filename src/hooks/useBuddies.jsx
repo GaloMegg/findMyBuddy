@@ -15,6 +15,9 @@ const buddyService = BuddyService.getInstance();
 const useBuddies = ({ ownerId }) => {
   const [buddies, setBuddies] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [createBuddyLoading, setCreateBuddyLoading] = useState(false)
+  const [deleteBuddyLoading, setDeleteBuddyLoading] = useState(false)
+  const [updateBuddyLoading, setUpdateBuddyLoading] = useState(false)
   const [errors, setErrors] = useState({})
   /**
    * Retrieves all buddies for a given owner ID.
@@ -22,17 +25,20 @@ const useBuddies = ({ ownerId }) => {
    * @param {number} ownerId - The ID of the owner.
    * @return {Promise<void>} - A promise that resolves when the operation is complete.
    */
-  const getAllBuddies = async (ownerId, where) => {
+  const getAllBuddies = async (ownerId) => {
     try {
-      setLoading(true);
       const result = await buddyService.findAll(ownerId);
       setBuddies(result);
+
     } catch (error) {
+      Toast.error(error.message)
       throw error;
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   };
+
+
 
   /**
    * Delete a buddy for a given owner.
@@ -42,7 +48,7 @@ const useBuddies = ({ ownerId }) => {
    * @return {type} description of return value
    */
   const deleteBuddy = async (buddyData, callback) => {
-    setLoading(true)
+    setDeleteBuddyLoading(true)
     try {
       if (!buddyData.name || !buddyData.type) {
         throw new Error('Missing buddy data')
@@ -56,7 +62,7 @@ const useBuddies = ({ ownerId }) => {
       throw error
     }
     finally {
-      setLoading(false)
+      setDeleteBuddyLoading(false)
     }
   }
 
@@ -74,7 +80,7 @@ const useBuddies = ({ ownerId }) => {
    */
   const updateBuddy = async (buddyData, callback) => {
     try {
-      setLoading(true)
+      setUpdateBuddyLoading(true)
       validateBuddy(buddyData)
       const result = await buddyService.update(buddyData.ownerId, buddyData.buddyId, buddyData)
       console.log(result)
@@ -86,7 +92,7 @@ const useBuddies = ({ ownerId }) => {
       console.log(error)
     }
     finally {
-      setLoading(false)
+      setUpdateBuddyLoading(false)
     }
   }
 
@@ -104,7 +110,7 @@ const useBuddies = ({ ownerId }) => {
    * @throws {Error} If any of the required buddy data is missing.
    */
   const createBuddy = async (buddyData, callback) => {
-    setLoading(true)
+    setCreateBuddyLoading(true)
     try {
       validateBuddy(buddyData)
       const buddyId = uuid.v4();
@@ -115,7 +121,7 @@ const useBuddies = ({ ownerId }) => {
       setErrors(error)
     }
     finally {
-      setLoading(false)
+      setCreateBuddyLoading(false)
     }
   }
 
@@ -123,9 +129,9 @@ const useBuddies = ({ ownerId }) => {
     setLoading(true);
     if (ownerId) {
       getAllBuddies(ownerId);
-    } else {
-      setLoading(false)
     }
+
+
     return () => {
       setBuddies([]);
       setLoading(true);
@@ -141,6 +147,7 @@ const useBuddies = ({ ownerId }) => {
     updateBuddy,
     errors,
     loading,
+    createBuddyLoading, updateBuddyLoading, deleteBuddyLoading
   };
 };
 

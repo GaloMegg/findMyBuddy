@@ -75,15 +75,18 @@ export default class SearchDA {
       const latDelta = 0.009; // Approximately 1km in latitude
       const lonDelta = 0.009 / Math.cos(lat * Math.PI / 180); // Approximately 1km in longitude at this latitude
 
-      const minLat = lat - latDelta;
-      const maxLat = lat + latDelta;
-      const minLon = lon - lonDelta;
-      const maxLon = lon + lonDelta;
+      // Calculate the minimum and maximum latitude and longitude values for the query.
+      // We subtract `latDelta` from the current latitude to get the minimum latitude and add `latDelta` to get the maximum latitude. 
+      // We do the same for the longitude.
+      const minLat = lat - latDelta; // Lower bound of latitude range
+      const maxLat = lat + latDelta; // Upper bound of latitude range
+      const minLon = lon - lonDelta; // Lower bound of longitude range
+      const maxLon = lon + lonDelta; // Upper bound of longitude range
 
       // Construct the Firestore query
-      const petsRef = collection(DB, this.ENTITY_NAME);
+      const buddiesRef = collection(DB, this.ENTITY_NAME);
       const q = query(
-        petsRef,
+        buddiesRef,
         where('latitude', '>=', minLat),
         where('latitude', '<=', maxLat),
         where('longitude', '>=', minLon),
@@ -94,14 +97,14 @@ export default class SearchDA {
       const querySnapshot = await getDocs(q);
 
       // Extract pet data from query results
-      const lostPets = [];
+      const LostBuddies = [];
       querySnapshot.forEach((docSnap) => {
-        const petData = docSnap.data();
-        petData.petId = docSnap.id;
-        lostPets.push(petData);
+        const buddyData = docSnap.data();
+        buddyData.buddyId = docSnap.id;
+        LostBuddies.push(buddyData);
       });
 
-      return lostPets;
+      return LostBuddies;
     }
     catch (error) {
       console.error('Error fetching pets:', error);
@@ -115,21 +118,55 @@ export default class SearchDA {
  * @param {string} searchId - The ID of the buddy document to delete.
  * @return {Promise<void>} A Promise that resolves once the deletion is complete.
  */
-  async deleteBuddy(ownerId, searchId) {
+  async deleteSearchbyBuddyId(buddyId) {
     // Construct a reference to the buddy document
-    const buddyRef = doc(DB, 'buddies', searchId);
-
+    const buddiesRef = collection(DB, this.ENTITY_NAME);
+    const q = query(
+      buddiesRef,
+      where('buddyId', '==', buddyId),
+    );
     try {
-      // Retrieve the buddy document to ensure it exists and belongs to the owner
-      const buddySnapshot = await getDoc(buddyRef);
-
-      // Check if the buddy document exists and belongs to the owner
-      if (buddySnapshot.exists() && buddySnapshot.data().ownerId === ownerId) {
-        // Delete the buddy document
-        await deleteDoc(buddyRef);
+      const querySnapshot = await getDocs(q);
+      // Extract pet data from query results
+      const lostBuddies = [];
+      querySnapshot.forEach((docSnap) => {
+        const petData = docSnap.data();
+        petData.searchId = docSnap.id;
+        lostBuddies.push(petData);
+      });
+      for await (const num of lostBuddies) {
+        await this.deleteSearchbyId(num.searchId)
       }
+      return lostBuddies;
     } catch (error) {
       console.error('Error deleting buddy document:', error);
+      throw error;
+    }
+  }
+
+
+  /**
+   * Deletes a search document by its ID.
+   *
+   * @param {string} searchId - The ID of the search document to delete.
+   * @return {Promise<void>} A Promise that resolves once the search document is deleted.
+   * @throws {Error} If the search document does not exist or does not belong to the owner.
+   */
+  async deleteSearchbyId(searchId) {
+    // Construct a reference to the buddy document
+    const searchRef = doc(DB, this.ENTITY_NAME, searchId);
+    try {
+      // Retrieve the buddy document to ensure it exists and belongs to the owner
+      const buddySnapshot = await getDoc(searchRef);
+
+      // Check if the buddy document exists and belongs to the owner
+      if (buddySnapshot.exists()) {
+        // Delete the buddy document
+        console.log(buddySnapshot.data())
+        await deleteDoc(searchRef);
+      }
+      return buddySnapshot.data()
+    } catch (error) {
       throw error;
     }
   }
@@ -155,7 +192,7 @@ export default class SearchDA {
         const updatedData = { ...buddySnapshot.data(), ...newData };
         // Update the buddy document with the merged data
         await setDoc(buddyRef, updatedData);
-      } 
+      }
     } catch (error) {
       console.error('Error updating buddy document:', error);
     }

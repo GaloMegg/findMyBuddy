@@ -88,7 +88,7 @@ export default class BuddyDA {
  */
   async deleteBuddy(ownerId, buddyId) {
     // Construct a reference to the buddy document
-    const buddyRef = doc(DB, 'buddies', buddyId);
+    const buddyRef = doc(DB, this.ENTITY_NAME, buddyId);
     try {
       // Retrieve the buddy document to ensure it exists and belongs to the owner
       const buddySnapshot = await getDoc(buddyRef);

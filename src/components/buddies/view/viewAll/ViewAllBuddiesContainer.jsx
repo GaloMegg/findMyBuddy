@@ -14,11 +14,7 @@ import ViewAllBuddies from './ViewAllBuddies'
  */
 const ViewAllBuddiesContainer = ({ navigation }) => {
   const { ownerId } = useGetCurrentUser()
-
-
-  const { buddies, getAllBuddies, loading } = useBuddies({
-    ownerId,
-  })
+  const { buddies, getAllBuddies, loading,  } = useBuddies({ ownerId, })
   if (loading)
     return (
       <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -27,7 +23,6 @@ const ViewAllBuddiesContainer = ({ navigation }) => {
     )
   return <SafeAreaView >
     <ViewAllBuddies
-      loading={loading}
       ownerId={ownerId}
       getAllBuddies={getAllBuddies}
       buddies={buddies}

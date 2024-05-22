@@ -4,7 +4,6 @@ import { Toast } from 'toastify-react-native';
 import BuddyService from '../services/buddy.service';
 import LocationService from '../services/location.service';
 import SearchService from '../services/search.service';
-import useGetLocation from '../utils/location';
 
 
 /**
@@ -15,8 +14,8 @@ import useGetLocation from '../utils/location';
  * @return {Object} An object containing searches, a function to delete a buddy, and a loading state.
  */
 const useSearches = () => {
-  const { location } = useGetLocation();
   const [loadingCreate, setLoadingCreate] = useState(false)
+  const [foundLoading, setFoundLoading] = useState(false)
   const [searches, setSearches] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -27,8 +26,9 @@ const useSearches = () => {
    * @return {Promise<void>} - A promise that resolves when the operation is complete.
    */
   const getAllSearches = async () => {
-    setLoading(true);
+
     try {
+      setLoading(true);
       const locationService = LocationService.getInstance();
       const location = await locationService.getLocation();
       const searchService = SearchService.getInstance();
@@ -65,7 +65,7 @@ const useSearches = () => {
       result = await searchService.create(searchId, { ...location, ...buddyData })
       const buddyService = BuddyService.getInstance();
       await buddyService.update(buddyData.ownerId, buddyData.buddyId, { ...buddyData, status: 'LOST' })
-      callback && callback(result)
+      callback && callback(true)
     } catch (error) {
       Toast.error(error.message)
       throw error
@@ -74,24 +74,41 @@ const useSearches = () => {
       setLoadingCreate(false)
     }
   }
+  const foundBuddy = async (buddyData, callback) => {
+    try {
+      setFoundLoading(true)
+      const searchService = SearchService.getInstance();
+      await searchService.deleteSearchbyBuddyId(
+        buddyData.buddyId
+      )
+      const buddyService = BuddyService.getInstance();
+      const result = await buddyService.update(buddyData.ownerId, buddyData.buddyId, { ...buddyData, status: 'SAFE' })
+      Toast.success('Buddy found!')
+      callback && callback(result)
+    } catch (error) {
+      Toast.error(error.message)
+    } finally {
+      setFoundLoading(false)
+    }
+  }
 
   useEffect(() => {
-    setLoading(true);
-    if (location?.latitude && location.longitude) {
-      getAllSearches(location?.latitude, location.latitude);
-    }
+    getAllSearches();
     return () => {
       setSearches([]);
       setLoading(true);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location]);
+  }, []);
+
 
   return {
     searches,
     createSearch, loadingCreate,
     getAllSearches,
     loading,
+    foundBuddy,
+    foundLoading
   };
 };
 

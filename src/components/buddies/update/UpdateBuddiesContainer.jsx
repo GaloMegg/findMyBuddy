@@ -6,13 +6,13 @@ import UpdateBuddy from './UpdateBuddy';
 
 const UpdateBuddiesContainer = ({ closeModal, buddyDataInitialValue }) => {
   const [buddyData, setBuddyData] = useState(buddyDataInitialValue)
-  const { updateBuddy, loading, errors } = useBuddies({})
+  const { updateBuddy, updateBuddyLoading, errors } = useBuddies({})
   return (
     <UpdateBuddy
       buddyData={buddyData}
       closeModal={closeModal}
       errors={errors}
-      loading={loading}
+      loading={updateBuddyLoading}
       onUpdate={async () => { await updateBuddy(buddyData, closeModal); }}
       setbuddyData={setBuddyData}
     />

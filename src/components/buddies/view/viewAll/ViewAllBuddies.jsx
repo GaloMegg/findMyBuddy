@@ -22,15 +22,19 @@ import UpdateBuddiesContainer from '../../update/UpdateBuddiesContainer';
 
 import { FontAwesome } from '@expo/vector-icons';
 import { COLORS } from '../../../../utils/constants';
+import SwipeTickIcon from '../../../styledComponents/swipables/SwipeTickIcon';
+import FoundBuddiesContainer from '../../found/FoundBuddiesContainer';
 /**
  * Renders a View displaying all the buddies.
  *
  * @param {Props} buddies - The list of buddies to display
  * @return {JSX.Element} The View displaying all buddies
  */
-const ViewAllBuddies = ({ buddies, ownerId, navigation, getAllBuddies, loading }) => {
+const ViewAllBuddies = ({ buddies, ownerId, getAllBuddies }) => {
+  const [loading, setLoading] = useState(false)
   const [createModal, setCreateModal] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
+  const [foundModal, setFoundModal] = useState(false)
   const [editModal, setEditModal] = useState(false)
   const [buddyData, setBuddyData] = useState({})
   const [lostModal, setLostModal] = useState(false)
@@ -42,12 +46,14 @@ const ViewAllBuddies = ({ buddies, ownerId, navigation, getAllBuddies, loading }
           width: '75%',
           flexDirection: 'row',
           justifyContent: 'center',
+          alignItems: 'center',
           height: '100%',
         }}
       >
         <SwipeTrashIcon onPress={_ => {
           setBuddyData(buddyData)
           setDeleteModal(true)
+
         }} />
         <SwipePencilIcon onPress={_ => {
           setBuddyData(buddyData)
@@ -61,6 +67,7 @@ const ViewAllBuddies = ({ buddies, ownerId, navigation, getAllBuddies, loading }
       <View
         style={{
           width: '37.5%',
+          alignItems: 'center',
           flexDirection: 'row',
           justifyContent: 'center',
           height: '100%',
@@ -78,17 +85,19 @@ const ViewAllBuddies = ({ buddies, ownerId, navigation, getAllBuddies, loading }
   const RenderLeftFoundActions = (buddyData) => {
     return (
       <View
+
         style={{
           width: '37.5%',
           flexDirection: 'row',
+          alignItems: 'center',
           justifyContent: 'center',
           height: '100%',
         }}
       >
 
-        <SwipeWarningIcon onPress={_ => {
+        <SwipeTickIcon onPress={_ => {
           setBuddyData(buddyData)
-          setLostModal(true)
+          setFoundModal(true)
         }} />
       </View>
     );
@@ -105,14 +114,22 @@ const ViewAllBuddies = ({ buddies, ownerId, navigation, getAllBuddies, loading }
 
 
 
-      {buddies.length
+      {!buddies.length && !loading
         ?
+        <View style={styles.noItemsAddButton} >
+          <AddButton onPress={_ => {
+            setCreateModal(true)
+          }} />
+        </View>
+        :
         <FlatList
           refreshing={loading}
           numColumns={2}
-          onRefresh={_ => {
+          onRefresh={async _ => {
+            setLoading(true)
             Vibration.vibrate(1);
-            getAllBuddies(ownerId)
+            await getAllBuddies(ownerId)
+            setLoading(false)
           }}
           contentContainerStyle={{
             gap: 15,
@@ -132,7 +149,10 @@ const ViewAllBuddies = ({ buddies, ownerId, navigation, getAllBuddies, loading }
             return (
               <Swipeable
                 renderRightActions={() => RenderRightActions(item)}
-                renderLeftActions={() => RenderLeftActions(item)}
+                renderLeftActions={() =>
+                  item.status == 'LOST' ? RenderLeftFoundActions(item) : RenderLeftActions(item)
+
+                }
               >
                 <Card>
                   <View
@@ -199,13 +219,7 @@ const ViewAllBuddies = ({ buddies, ownerId, navigation, getAllBuddies, loading }
             item =>
               item.buddyId
           }
-        />
-        :
-        <View style={styles.noItemsAddButton} >
-          <AddButton onPress={_ => {
-            setCreateModal(true)
-          }} />
-        </View>}
+        />}
 
       {createModal && <CreateBuddiesContainer
         closeModal={(refresh) => { setCreateModal(false); refresh && getAllBuddies(ownerId) }} />}
@@ -218,6 +232,9 @@ const ViewAllBuddies = ({ buddies, ownerId, navigation, getAllBuddies, loading }
       {lostModal && <LostModalContainer
         buddyData={buddyData}
         closeModal={(refresh) => { setLostModal(false); refresh && getAllBuddies(ownerId) }} />}
+      {foundModal && <FoundBuddiesContainer
+        buddyData={buddyData}
+        closeModal={(refresh) => { setFoundModal(false); refresh && getAllBuddies(ownerId) }} />}
     </SafeAreaView >
   )
 }
