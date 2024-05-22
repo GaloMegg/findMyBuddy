@@ -1,8 +1,8 @@
-import { AntDesign } from '@expo/vector-icons';
-import { Button, Modal, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Loader from '../../styledComponents/Loader';
-import { ICONS_MAPPED } from './helper';
+import { Modal, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { COLORS } from '../../../utils/constants';
+import ActionButton from '../../styledComponents/ActionButton';
+import CancelButton from '../../styledComponents/CancelButton';
+import CloseButton from '../../styledComponents/CloseButton';
 /**
  * Renders a container component for creating buddies.
  *
@@ -11,50 +11,37 @@ import { ICONS_MAPPED } from './helper';
  * @return {JSX.Element} The rendered container component.
  */
 const DeleteBuddy = ({ loading, closeModal, buddyData, onDelete }) => {
-    if (loading) return <Modal>
-        <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-            <Loader />
-        </SafeAreaView>
-    </Modal>
-    return (
-        <Modal style={{}}>
-            <SafeAreaView style={{}}>
-                <AntDesign name="closecircle" size={24} color="black" style={{ gap: 10, width: '100%', alignItems: 'flex-start', paddingHorizontal: '10%' }} onPress={closeModal} />
-            </SafeAreaView>
-            <SafeAreaView style={{
-                gap: 10,
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: '80%'
-            }}>
-                <ScrollView contentContainerStyle={{ gap: 10, alignItems: 'center', justifyContent: 'center', height: '100%' }}
-                    style={{ width: '100%', }}>
 
-                    <Text style={{ fontSize: 20 }}>Delete a buddy</Text>
-                    <View>
-                        <Text>Are you sure you want to delete <Text style={{ fontWeight: 'bold' }}>{buddyData.name}
-                        </Text>?</Text>
-                        <View style={{ gap: 10, flexDirection: 'row', padding: 10, justifyContent: 'center' }}>
-                            <View style={{ gap: 10, flexDirection: 'row', padding: 10, alignItems: 'center', justifyContent: 'center' }}>
-                                <Text>Type:</Text>
-                                <Icon name={ICONS_MAPPED[buddyData.type]} style={{
-                                    fontSize: 28,
-                                    marginRight: 8,
-                                }} />
-                            </View>
-                            <View style={{ gap: 10, flexDirection: 'row', padding: 10, justifyContent: 'center', alignItems: 'center' }}>
-                                <Text>Status:</Text>
-                                <Icon name={ICONS_MAPPED[buddyData.status]} style={{
-                                    fontSize: 28,
-                                    marginRight: 8,
-                                }} />
-                            </View>
+    return (
+        <Modal animationType='slide'
+            transparent style={styles.modal}>
+
+            <SafeAreaView style={styles.safeAreaView}>
+                <View style={styles.safeAreaView.closeModal}>
+                    <CloseButton onPress={closeModal} />
+                </View>
+
+                <ScrollView contentContainerStyle={styles.safeAreaView.contentContainerStyle}
+                    style={styles.safeAreaView.scrollView}>
+
+
+                    <Text style={styles.text}>
+                        Are you sure you want to delete
+                        <Text style={styles.bold}> {buddyData.name}
+                        </Text>
+                        ?
+                    </Text>
+                    <View style={styles.buttonContainer}>
+                        <View style={styles.buttonContainer.button}>
+                            <CancelButton text='Cancel' onPress={closeModal} />
+                        </View>
+                        <View style={styles.buttonContainer.button}>
+                            <ActionButton loading={loading}
+                                disabled={loading}
+                                text='Delete' onPress={onDelete} />
                         </View>
                     </View>
-                    <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'center' }}>
-                        <Button title='Cancel' onPress={closeModal} />
-                        <Button title='Delete' onPress={onDelete} />
-                    </View>
+
                 </ScrollView>
 
             </SafeAreaView>
@@ -62,4 +49,35 @@ const DeleteBuddy = ({ loading, closeModal, buddyData, onDelete }) => {
     )
 }
 export default DeleteBuddy
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    safeAreaView: {
+        gap: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '80%',
+        backgroundColor: COLORS.WHITE,
+        closeModal: { flexDirection: 'row', gap: 10, justifyContent: 'flex-end', width: '100%', paddingHorizontal: '10%' },
+        contentContainerStyle: { gap: 20, alignItems: 'center', justifyContent: 'center', height: '100%' },
+        scrollView: {
+            width: '100%',
+        }
+    },
+    modal: {
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 10
+    },
+    buttonContainer: {
+        flexDirection: 'row', gap: 10, justifyContent: 'center', width: '100%',
+        button: { flexDirection: 'row', gap: 10, justifyContent: 'center', width: '35%' }
+    },
+    bold: {
+        fontWeight: 'bold',
+        fontSize: 20
+    },
+    text: {
+        fontSize: 20
+    }
+})

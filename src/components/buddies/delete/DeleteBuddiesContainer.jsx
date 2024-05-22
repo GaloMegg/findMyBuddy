@@ -6,8 +6,7 @@ const DeleteBuddiesContainer = ({ closeModal, buddyData }) => {
   return (
     <DeleteBuddy
       onDelete={async () => {
-        await deleteBuddy(buddyData);
-        closeModal();
+        await deleteBuddy(buddyData, closeModal);
       }}
       loading={loading}
       buddyData={buddyData}

@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     display: 'flex',
     alignItems: 'center',
-    maxHeight: 80,
+    maxHeight: 200,
+    borderRadius: 16,
   },
 })

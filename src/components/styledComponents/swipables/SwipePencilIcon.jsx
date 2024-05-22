@@ -19,8 +19,8 @@ export default SwipePencilIcon
 
 const styles = StyleSheet.create({
     container: {
-        borderBottomRightRadius: 10,
-        borderTopRightRadius: 10,
+        borderBottomRightRadius: 17,
+        borderTopRightRadius: 17,
         alignItems: 'center',
         flexDirection: 'row',
         gap: 10,

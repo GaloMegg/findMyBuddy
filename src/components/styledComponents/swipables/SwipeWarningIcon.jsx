@@ -21,8 +21,10 @@ export default SwipeWarningIcon
 const styles = StyleSheet.create({
     container: {
 
-        borderBottomLeftRadius: 10,
-        borderTopLeftRadius: 10,
+        borderBottomRightRadius: 17,
+        borderTopRightRadius: 17,
+        borderBottomLeftRadius: 17,
+        borderTopLeftRadius: 17,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',

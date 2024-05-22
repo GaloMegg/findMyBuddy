@@ -19,6 +19,8 @@ export default SwipeTrashIcon
 
 const styles = StyleSheet.create({
     container: {
+        borderBottomLeftRadius: 17,
+        borderTopLeftRadius: 17,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',

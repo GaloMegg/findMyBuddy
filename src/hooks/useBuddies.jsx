@@ -41,17 +41,18 @@ const useBuddies = ({ ownerId }) => {
    * @param {type} buddyId - description of buddyId
    * @return {type} description of return value
    */
-  const deleteBuddy = async (buddyData) => {
+  const deleteBuddy = async (buddyData, callback) => {
     setLoading(true)
     try {
-      if (!buddyData.name || !buddyData.type || !buddyData.status) {
+      if (!buddyData.name || !buddyData.type ) {
         throw new Error('Missing buddy data')
       }
       result = await buddyService.delete(buddyData.ownerId, buddyData.buddyId)
       Toast.success('Deleted')
+      callback && callback(result)
       return result
     } catch (error) {
-      console.error(error)
+      Toast.error(error.message)
       throw error
     }
     finally {

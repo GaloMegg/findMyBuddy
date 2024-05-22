@@ -12,7 +12,7 @@ const CreateBuddiesContainer = ({ closeModal }) => {
     ownerId,
     name: '',
     type: '',
-    status: '',
+    status: 'SAFE',
   })
   return (
     <CreateBuddy
