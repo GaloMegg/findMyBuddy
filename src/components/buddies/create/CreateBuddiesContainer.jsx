@@ -17,8 +17,7 @@ const CreateBuddiesContainer = ({ closeModal }) => {
   return (
     <CreateBuddy
       onCreate={async () => {
-        await createBuddy(buddyData);
-        closeModal();
+        await createBuddy(buddyData, closeModal);
       }}
       loading={loading}
       errors={errors}

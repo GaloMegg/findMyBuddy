@@ -57,11 +57,13 @@ const LogIn = ({ email, password, setUserDataHandler, route, navigation }) => {
         />
         {/* Sign up button */}
         <View style={{ width: '80%', display: 'flex', flexDirection: 'row', gap: 10 }}>
-
           <ActionButton
             text={'Log in'}
+            loading={loading}
+            disabled={loading}
             onPress={async (e) => {
               try {
+                setLoading(true)
                 const owner = await loginWithEmailAndPassword(email, password);
                 const ownerId = owner.user.uid
                 dispatch(setUser({ ownerId }));
@@ -69,6 +71,8 @@ const LogIn = ({ email, password, setUserDataHandler, route, navigation }) => {
               } catch (error) {
                 console.log(error)
                 setErrors(error)
+              }finally{
+                setLoading(false)
               }
             }}
           >

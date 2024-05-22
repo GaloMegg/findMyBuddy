@@ -99,16 +99,16 @@ const useBuddies = ({ ownerId }) => {
    *   - `result`: The result of the creation process, or `undefined` if the process is still ongoing.
    * @throws {Error} If any of the required buddy data is missing.
    */
-  const createBuddy = async (buddyData) => {
+  const createBuddy = async (buddyData, callback) => {
     setLoading(true)
     try {
       validateBuddy(buddyData)
       const buddyId = uuid.v4();
       result = await buddyService.create(buddyId, buddyData)
       Toast.success('Created')
+      callback && callback(result)
     } catch (error) {
       setErrors(error)
-      throw error
     }
     finally {
       setLoading(false)

@@ -1,7 +1,9 @@
 import { AntDesign } from '@expo/vector-icons';
-import { Button, Modal, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Modal, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { COLORS } from '../../../utils/constants';
 import useGetImagePicker from '../../../utils/images';
-import Loader from '../../styledComponents/Loader';
+import ActionButton from '../../styledComponents/ActionButton';
+import CancelButton from '../../styledComponents/CancelButton';
 import ProfileImageInput from '../../styledComponents/ProfileImageInput';
 import SelectInputComponent from '../../styledComponents/SelectInputComponent';
 import TextAreaCustom from '../../styledComponents/TextAreaCustom';
@@ -17,33 +19,20 @@ import { BUDDIES_TYPE_OPTIONS } from '../helper';
  */
 const CreateBuddy = ({ loading, closeModal, buddyData, setbuddyData, onCreate, errors }) => {
     const { pickImage } = useGetImagePicker();
-    if (loading) return <Modal>
-        <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-            <Loader />
-        </SafeAreaView>
-    </Modal>
     return (
-        <Modal style={{}}>
-            <SafeAreaView style={{}}>
-                <AntDesign name="closecircle" size={24} color="black" style={{ gap: 10, width: '100%', alignItems: 'flex-start', paddingHorizontal: '10%' }} onPress={closeModal} />
-            </SafeAreaView>
-            <SafeAreaView style={{
-                gap: 10,
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: '80%'
-            }}>
+        <Modal animationType='slide'
+            transparent style={styles.modal}>
+            <SafeAreaView style={styles.safeAreaView}>
+                <View style={styles.closeContainer}>
+
+                    <AntDesign name="closecircle" size={24} color="black" style={styles.closeContainer.closeButton} onPress={closeModal} />
+                </View>
                 <ScrollView
-                    automaticallyAdjustKeyboardInsets={true}
-                    contentContainerStyle={{ gap: 10, alignItems: 'center', justifyContent: 'center' }}
-                    style={{ width: '100%', }}>
-                    <Text style={{ fontSize: 20 }}>Create a new buddy</Text>
-                    <View style={{
-                        gap: 10,
-                        width: '100%',
-                        alignItems: 'center',
-                        paddingHorizontal: '10%',
-                    }}>
+                    automaticallyAdjustKeyboardInsets
+                    contentContainerStyle={styles.safeAreaView.scrollView.contentContainer}
+                    style={styles.safeAreaView.scrollView.container}>
+                    <Text style={styles.safeAreaView.scrollView.text}>Create a new buddy</Text>
+                    <View style={styles.safeAreaView.scrollView.formContainer}>
                         <ProfileImageInput
                             onPress={async () => {
                                 const item = await pickImage()
@@ -77,15 +66,66 @@ const CreateBuddy = ({ loading, closeModal, buddyData, setbuddyData, onCreate, e
                             value={buddyData.distinctiveMarkings}
                         />
                     </View>
-                    <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'center' }}>
-                        <Button title='Cancel' onPress={closeModal} />
-                        <Button title='Create' onPress={onCreate} />
+                    <View style={styles.safeAreaView.scrollView.buttonContainer}>
+                        <View style={styles.safeAreaView.scrollView.buttonContainer.button}>
+                            <CancelButton text='Cancel' onPress={closeModal} />
+                        </View>
+                        <View style={styles.safeAreaView.scrollView.buttonContainer.button}>
+                            <ActionButton loading={loading}
+                                disabled={loading}
+                                text='Create' onPress={onCreate} />
+                        </View>
                     </View>
                 </ScrollView>
-
             </SafeAreaView>
         </Modal >
     )
 }
 export default CreateBuddy
-const styles = StyleSheet.create({})
+
+const styles = StyleSheet.create({
+    modal: {
+        backgroundColor: COLORS.WHITE,
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 10
+    },
+    closeContainer: {
+        gap: 10,
+        width: '100%',
+        alignItems: 'flex-end',
+        paddingHorizontal: '10%',
+        closeButton: {
+        }
+    },
+    safeAreaView: {
+        gap: 10,
+        paddingVertical: 15,
+        height: '100%',
+
+        backgroundColor: COLORS.WHITE,
+        scrollView: {
+            text: { fontSize: 20 },
+            container: { width: '100%', },
+            contentContainer: {
+                gap: 10,
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100%',
+                height: '80%'
+            },
+            buttonContainer: {
+                flexDirection: 'row', gap: 10, justifyContent: 'center', width: '100%',
+                button: { flexDirection: 'row', gap: 10, justifyContent: 'center', width: '35%' }
+            },
+            formContainer: {
+                gap: 10,
+                width: '100%',
+                alignItems: 'center',
+                paddingHorizontal: '10%',
+            },
+        }
+    }
+})

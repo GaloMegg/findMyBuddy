@@ -2,25 +2,24 @@ import React from 'react'
 import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native'
 import { COLORS } from '../../utils/constants'
 
-const ActionButton = ({ text, onPress, disabled, loading }) => {
+const CancelButton = ({ text, onPress, disabled, loading }) => {
     return (
         <Pressable
             onPress={onPress}
             style={({ pressed, }) => [
                 {
-                    backgroundColor: pressed ? COLORS.DARK_BROWN : disabled ? COLORS.LIGH_BROWN : COLORS.BROWN
-
+                    backgroundColor: pressed ? COLORS.GREY : disabled ? COLORS.GREY : COLORS.LIGHT_GREY
                 },
                 styles.button
             ]}
             disabled={disabled}
         >
-            {loading ? <ActivityIndicator color={COLORS.WHITE} /> : <Text style={styles.text}>{text}</Text>}
+            {loading ? <ActivityIndicator /> : <Text style={styles.text}>{text}</Text>}
         </Pressable>
     )
 }
 
-export default ActionButton
+export default CancelButton
 
 const styles = StyleSheet.create({
     button: {
@@ -34,7 +33,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     text: {
-        color: 'white',
+        color: COLORS.DARK_BROWN,
         fontSize: 20,
     }
 })

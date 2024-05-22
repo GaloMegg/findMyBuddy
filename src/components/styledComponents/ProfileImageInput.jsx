@@ -13,9 +13,8 @@ const ProfileImageInput = ({ value, onPress }) => {
         )
     }
     return (
-        <TouchableOpacity style={styles.image.container}>
+        <TouchableOpacity style={styles.image.container} onPress={onPress}>
             <Image
-                onPress={onPress}
                 source={{ uri: value }}
                 style={styles.image.image}
                 resizeMode='contain'

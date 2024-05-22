@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { COLORS } from '../../utils/constants';
 import TextError from './TextError';
 
 const SelectInputComponent = ({ options, label, onSelect, value, error }) => {
@@ -64,8 +65,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 8,
-        borderWidth: 1,
-        borderColor: 'black',
+        borderWidth: 1.5,
+        borderColor: COLORS.DARK_BROWN,
     },
     dropdownButtonTxtStyle: {
         flex: 1,
