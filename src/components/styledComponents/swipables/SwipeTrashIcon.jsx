@@ -1,12 +1,14 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { Pressable, StyleSheet } from 'react-native';
+import { COLORS } from '../../../utils/constants';
 const SwipeTrashIcon = ({ onPress }) => {
     return (
         <Pressable
             onPress={onPress}
             style={({ pressed }) => [
                 {
-                    backgroundColor: pressed ? '#cf3e36' : '#FF3B30'
+                    backgroundColor: pressed ? COLORS.RED
+                        : COLORS.LIGHT_RED
                 },
                 styles.container
             ]}
@@ -19,12 +21,13 @@ export default SwipeTrashIcon
 
 const styles = StyleSheet.create({
     container: {
-        borderBottomLeftRadius: 17,
-        borderTopLeftRadius: 17,
+        // borderBottomLeftRadius: 17,
+        // borderTopLeftRadius: 17,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         gap: 10,
+        // marginLeft: '50%',
         height: '100%',
         width: '50%'
     }

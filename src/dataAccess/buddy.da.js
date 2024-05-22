@@ -125,6 +125,7 @@ export default class BuddyDA {
         // Update the buddy document with the merged data
         await setDoc(buddyRef, updatedData);
       }
+      return true
     } catch (error) {
       console.error('Error updating buddy document:', error);
     }

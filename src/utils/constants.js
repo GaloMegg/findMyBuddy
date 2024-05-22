@@ -1,7 +1,22 @@
 export const COLORS = {
-    LIGHT_GREY: '#D3D3D3',
+    RED: '#FF3B30',
+    LIGHT_RED: '#FF453A',
+
+    YELLOW: '#FFCC00',
+    LIGHT_YELLOW: '#FFD60A',
+
+    GREEN: '#34C759',
+    LIGHT_GREEN: '#30D158',
+
+    BLUE: '#007AFF',
+    LIGHT_BLUE: '#0A84FF',
+
     GREY: '#A9A9A9',
+    LIGHT_GREY: '#D3D3D3',
+
     WHITE: '#FFFFF0',
+
+    
     DARK_BROWN: '#543310',
     BROWN: '#74512D',
     LIGH_BROWN: '#AF8F6F',

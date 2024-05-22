@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import uuid from 'react-native-uuid';
+import { Toast } from 'toastify-react-native';
+import BuddyService from '../services/buddy.service';
 import LocationService from '../services/location.service';
 import SearchService from '../services/search.service';
 import useGetLocation from '../utils/location';
@@ -14,6 +16,7 @@ import useGetLocation from '../utils/location';
  */
 const useSearches = () => {
   const { location } = useGetLocation();
+  const [loadingCreate, setLoadingCreate] = useState(false)
   const [searches, setSearches] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -23,10 +26,9 @@ const useSearches = () => {
    * @param {number} ownerId - The ID of the owner.
    * @return {Promise<void>} - A promise that resolves when the operation is complete.
    */
-  const getAllSearches = async (latitude, longitude) => {
-
+  const getAllSearches = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       const locationService = LocationService.getInstance();
       const location = await locationService.getLocation();
       const searchService = SearchService.getInstance();
@@ -52,22 +54,24 @@ const useSearches = () => {
    *   - `result`: The result of the creation process, or `undefined` if the process is still ongoing.
    * @throws {Error} If any of the required buddy data is missing.
    */
-  const createSearch = async (buddyData) => {
-    setLoading(true)
+  const createSearch = async (buddyData, callback) => {
+    setLoadingCreate(true)
     try {
-      if (!buddyData.name || !buddyData.type || !buddyData.status) { throw new Error('Missing buddy data') }
+      if (!buddyData.name || !buddyData.type) { throw new Error('Missing buddy data') }
       const searchId = uuid.v4();
       const searchService = SearchService.getInstance();
       const locationService = LocationService.getInstance();
       const location = await locationService.getLocation();
       result = await searchService.create(searchId, { ...location, ...buddyData })
-
+      const buddyService = BuddyService.getInstance();
+      await buddyService.update(buddyData.ownerId, buddyData.buddyId, { ...buddyData, status: 'LOST' })
+      callback && callback(result)
     } catch (error) {
-      console.error(error)
+      Toast.error(error.message)
       throw error
     }
     finally {
-      setLoading(false)
+      setLoadingCreate(false)
     }
   }
 
@@ -75,8 +79,6 @@ const useSearches = () => {
     setLoading(true);
     if (location?.latitude && location.longitude) {
       getAllSearches(location?.latitude, location.latitude);
-    } else {
-      setLoading(false)
     }
     return () => {
       setSearches([]);
@@ -87,7 +89,7 @@ const useSearches = () => {
 
   return {
     searches,
-    createSearch,
+    createSearch, loadingCreate,
     getAllSearches,
     loading,
   };

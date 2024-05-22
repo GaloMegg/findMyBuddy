@@ -5,7 +5,7 @@ import { COLORS } from '../../utils/constants'
 const CancelButton = ({ text, onPress, disabled, loading }) => {
     return (
         <Pressable
-            onPress={onPress}
+            onPress={()=>onPress()}
             style={({ pressed, }) => [
                 {
                     backgroundColor: pressed ? COLORS.GREY : disabled ? COLORS.GREY : COLORS.LIGHT_GREY

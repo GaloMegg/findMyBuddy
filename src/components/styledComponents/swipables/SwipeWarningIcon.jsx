@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { COLORS } from '../../../utils/constants';
 
 const SwipeWarningIcon = ({ onPress }) => {
     return (
@@ -7,7 +8,8 @@ const SwipeWarningIcon = ({ onPress }) => {
             onPress={onPress}
             style={({ pressed }) => [
                 {
-                    backgroundColor: pressed ? '#baa057' : '#f4d03f'
+                    backgroundColor: pressed ?
+                        COLORS.YELLOW : COLORS.LIGHT_YELLOW
                 },
                 styles.container
             ]}
@@ -21,8 +23,6 @@ export default SwipeWarningIcon
 const styles = StyleSheet.create({
     container: {
 
-        borderBottomRightRadius: 17,
-        borderTopRightRadius: 17,
         borderBottomLeftRadius: 17,
         borderTopLeftRadius: 17,
         flexDirection: 'row',

@@ -1,6 +1,8 @@
-import { AntDesign } from '@expo/vector-icons';
-import { Button, Modal, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-import Loader from '../../styledComponents/Loader';
+import { Modal, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { COLORS } from '../../../utils/constants';
+import ActionButton from '../../styledComponents/ActionButton';
+import CancelButton from '../../styledComponents/CancelButton';
+import CloseButton from '../../styledComponents/CloseButton';
 
 /**
  * Renders a container component for creating buddies.
@@ -9,30 +11,30 @@ import Loader from '../../styledComponents/Loader';
  * @param {function} props.closeModal - The function to close the modal.
  * @return {JSX.Element} The rendered container component.
  */
-const LostBuddy = ({ loading, closeModal, onCreate }) => {
-    if (loading) return <Modal>
-        <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-            <Loader />
-        </SafeAreaView>
-    </Modal>
+const LostBuddy = ({ loading, closeModal, onLabelAsLost }) => {
+
     return (
-        <Modal style={{}}>
-            <SafeAreaView style={{}}>
-                <AntDesign name="closecircle" size={24} color="black" style={{ gap: 10, width: '100%', alignItems: 'flex-start', paddingHorizontal: '10%' }} onPress={closeModal} />
-            </SafeAreaView>
-            <SafeAreaView style={{
-                gap: 10,
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: '80%'
-            }}>
-                <ScrollView contentContainerStyle={{ gap: 10, alignItems: 'center', justifyContent: 'center', height: '100%' }}
-                    style={{ width: '100%', }}>
+        <Modal animationType='slide'
+            transparent style={styles.modal}>
+            <SafeAreaView style={styles.safeAreaView}>
+                <View style={styles.safeAreaView.closeModal}>
+                    <CloseButton onPress={closeModal} />
+                </View>
+                <ScrollView contentContainerStyle={styles.safeAreaView.scrollView.container}
+                    style={styles.safeAreaView.scrollView.style}>
                     <Text>Are you sure you want to label this buddy as lost?</Text>
-                    <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'center' }}>
-                        <Button title='No' onPress={closeModal} />
-                        <Button title='Yes' onPress={onCreate} />
+
+                    <View style={styles.buttonContainer}>
+                        <View style={styles.buttonContainer.button}>
+                            <CancelButton text='No' onPress={closeModal} />
+                        </View>
+                        <View style={styles.buttonContainer.button}>
+                            <ActionButton loading={loading}
+                                disabled={loading}
+                                text='Yes' onPress={onLabelAsLost} />
+                        </View>
                     </View>
+
                 </ScrollView>
 
             </SafeAreaView>
@@ -41,4 +43,35 @@ const LostBuddy = ({ loading, closeModal, onCreate }) => {
     )
 }
 export default LostBuddy
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    modal: {
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 10
+    },
+    safeAreaView: {
+
+        backgroundColor: COLORS.WHITE,
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        width: '100%',
+        closeModal: {
+            width: '100%',
+            alignItems: 'flex-end',
+            paddingHorizontal: '10%'
+        },
+        scrollView: {
+            container: {
+                gap: 10, alignItems: 'center', justifyContent: 'center', height: '100%'
+            },
+            style: { width: '100%', }
+        }
+    },
+    buttonContainer: {
+        flexDirection: 'row', gap: 10, justifyContent: 'center', width: '100%',
+        button: { flexDirection: 'row', gap: 10, justifyContent: 'center', width: '35%' }
+    },
+})

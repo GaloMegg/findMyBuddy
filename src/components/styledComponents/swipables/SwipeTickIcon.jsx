@@ -1,13 +1,13 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { Pressable, StyleSheet } from 'react-native';
 import { COLORS } from '../../../utils/constants';
-const SwipePencilIcon = ({ onPress }) => {
+const SwipeTickIcon = ({ onPress }) => {
     return (
         <Pressable
             onPress={onPress}
             style={({ pressed }) => [
                 {
-                    backgroundColor: pressed ? COLORS.BLUE : COLORS.LIGHT_BLUE
+                    backgroundColor: pressed ? COLORS.GREEN : COLORS.LIGHT_GREEN
                 },
                 styles.container
             ]}
@@ -16,7 +16,7 @@ const SwipePencilIcon = ({ onPress }) => {
         </Pressable>
     )
 }
-export default SwipePencilIcon
+export default SwipeTickIcon
 
 const styles = StyleSheet.create({
     container: {

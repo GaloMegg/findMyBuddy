@@ -4,14 +4,13 @@ import LostBuddy from './LostBuddy';
 
 
 const LostModalContainer = ({ closeModal, buddyData }) => {
-  const { createSearch, loading } = useSearches({})
+  const { createSearch, loadingCreate } = useSearches({})
   return (
     <LostBuddy
-      onCreate={async () => {
-        await createSearch(buddyData);
-        closeModal();
+      onLabelAsLost={async () => {
+        await createSearch(buddyData, closeModal);
       }}
-      loading={loading}
+      loading={loadingCreate}
       closeModal={closeModal}
     />
   )

@@ -74,6 +74,25 @@ const ViewAllBuddies = ({ buddies, ownerId, navigation, getAllBuddies, loading }
       </View>
     );
   }
+
+  const RenderLeftFoundActions = (buddyData) => {
+    return (
+      <View
+        style={{
+          width: '37.5%',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          height: '100%',
+        }}
+      >
+
+        <SwipeWarningIcon onPress={_ => {
+          setBuddyData(buddyData)
+          setLostModal(true)
+        }} />
+      </View>
+    );
+  }
   return (
     <SafeAreaView style={{ height: '100%' }}>
       <View style={{
@@ -188,10 +207,17 @@ const ViewAllBuddies = ({ buddies, ownerId, navigation, getAllBuddies, loading }
           }} />
         </View>}
 
-      {createModal && <CreateBuddiesContainer closeModal={_ => { setCreateModal(false); getAllBuddies(ownerId) }} />}
-      {deleteModal && <DeleteBuddiesContainer buddyData={buddyData} closeModal={_ => { setDeleteModal(false); getAllBuddies(ownerId) }} />}
-      {editModal && <UpdateBuddiesContainer buddyDataInitialValue={buddyData} closeModal={_ => { setDeleteModal(false); getAllBuddies(ownerId) }} />}
-      {lostModal && <LostModalContainer buddyData={buddyData} closeModal={_ => { setLostModal(false); getAllBuddies(ownerId) }} />}
+      {createModal && <CreateBuddiesContainer
+        closeModal={(refresh) => { setCreateModal(false); refresh && getAllBuddies(ownerId) }} />}
+      {deleteModal && <DeleteBuddiesContainer
+        buddyData={buddyData}
+        closeModal={(refresh) => { setDeleteModal(false); refresh && getAllBuddies(ownerId) }}
+      />}
+      {editModal && <UpdateBuddiesContainer buddyDataInitialValue={buddyData}
+        closeModal={(refresh) => { setEditModal(false); refresh && getAllBuddies(ownerId) }} />}
+      {lostModal && <LostModalContainer
+        buddyData={buddyData}
+        closeModal={(refresh) => { setLostModal(false); refresh && getAllBuddies(ownerId) }} />}
     </SafeAreaView >
   )
 }

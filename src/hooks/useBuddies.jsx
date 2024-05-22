@@ -44,7 +44,7 @@ const useBuddies = ({ ownerId }) => {
   const deleteBuddy = async (buddyData, callback) => {
     setLoading(true)
     try {
-      if (!buddyData.name || !buddyData.type ) {
+      if (!buddyData.name || !buddyData.type) {
         throw new Error('Missing buddy data')
       }
       result = await buddyService.delete(buddyData.ownerId, buddyData.buddyId)
@@ -72,15 +72,18 @@ const useBuddies = ({ ownerId }) => {
    * @return {Promise<Object>} An object containing the loading state and the result of the update operation.
    * @throws {Error} If the buddyData object is missing any of the required fields.
    */
-  const updateBuddy = async (buddyData) => {
-    setLoading(true)
+  const updateBuddy = async (buddyData, callback) => {
     try {
-      result = await buddyService.update(buddyData.ownerId, buddyData.buddyId, buddyData)
+      setLoading(true)
+      validateBuddy(buddyData)
+      const result = await buddyService.update(buddyData.ownerId, buddyData.buddyId, buddyData)
+      console.log(result)
       Toast.success('Updated')
-
+      console.log(callback)
+      callback && callback(result)
     } catch (error) {
-      console.error(error)
-      throw error
+      setErrors(error)
+      console.log(error)
     }
     finally {
       setLoading(false)

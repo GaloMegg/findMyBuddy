@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import useGetCurrentUser from '../../../../hooks/useGetCurrentUser'
 import useSearches from '../../../../hooks/useSearches'
-import Loader from '../../../styledComponents/Loader'
 import ViewAllSearches from './ViewAllSearches'
 
 /**
@@ -15,12 +14,7 @@ import ViewAllSearches from './ViewAllSearches'
 const ViewAllSearchesContainer = ({ navigation }) => {
   const { ownerId } = useGetCurrentUser()
   const { getAllSearches, loading, searches } = useSearches()
-  if (loading)
-    return (
-      <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Loader />
-      </SafeAreaView>
-    )
+
   return <SafeAreaView>
     <ViewAllSearches
       loading={loading}

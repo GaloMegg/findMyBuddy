@@ -29,7 +29,6 @@ const ViewAllSearches = ({ searches, ownerId, getAllSearches, loading }) => {
           contentContainerStyle={{ gap: 10, width: '100%', height: '100%', paddingHorizontal: 10, }}
           numColumns={2}
           columnWrapperStyle={{ gap: 10, justifyContent: 'space-around', flexDirection: 'row', width: '100%', }}
-
           renderItem={({ item }) => {
             return (
               <Card>
