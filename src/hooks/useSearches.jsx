@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import uuid from 'react-native-uuid';
 import { Toast } from 'toastify-react-native';
 import BuddyService from '../services/buddy.service';
@@ -7,7 +7,12 @@ import LocationService from '../services/location.service';
 import OwnerService from '../services/owner.service';
 import SearchService from '../services/search.service';
 import useGetCurrentUser from './useGetCurrentUser';
-
+const buddyService = BuddyService.getInstance()
+const email = EmailService.getInstance()
+const locationService = LocationService.getInstance();
+const ownerService = OwnerService.getInstance();
+const searchService = SearchService.getInstance();
+const searchesService = SearchService.getInstance();
 
 /**
  * Returns an object containing searches, a function to delete a buddy, and a loading state.
@@ -24,114 +29,123 @@ const useSearches = () => {
   const [searches, setSearches] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const sendFoundEmail = async (buddyData, callback) => {
-    try {
-      setfoundEmail(true)
-
-      const ownerService = OwnerService.getInstance();
-      const currentOwner = await ownerService.findOne(ownerId)
-
-      const buddyOwnerId = buddyData.ownerId
-      const buddyOwner = await ownerService.findOne(buddyOwnerId)
-
-      const email = EmailService.getInstance()
-
-      const mailData = {
-        reply_to: currentOwner.email,
-        from_name: currentOwner.name,
-        to_name: buddyOwner.name,
-        pet_type: buddyData.type.toLowerCase(),
-        email: buddyOwner.email,
-        phoneNumber: buddyOwner.phoneNumber,
-        to_email: buddyOwner.email
-      }
-
-      const emailResult = await email.sendFoundEmail(mailData)
-
-      const searchesService = SearchService.getInstance();
-      await searchesService.deleteSearchbyId(buddyData.searchId)
-      const buddyService = BuddyService.getInstance()
-      await buddyService.update(buddyData.ownerId, buddyData.buddyId, { ...buddyData, status: 'SAFE' })
-      Toast.success('Buddy labeled as found! Email sent to owner.')
-      callback && callback(true)
-      return emailResult;
-    } catch (error) {
-      throw error;
-    } finally {
-      setfoundEmail(false)
-    }
-  }
   /**
-   * Retrieves all searches for a given owner ID.
+   * Sends an email to the owner of a lost pet when the pet is found.
    *
-   * @param {number} ownerId - The ID of the owner.
-   * @return {Promise<void>} - A promise that resolves when the operation is complete.
+   * @param {Object} buddyData - The data of the lost pet.
+   * @param {string} buddyData.ownerId - The ID of the owner of the lost pet.
+   * @param {string} buddyData.buddyId - The ID of the lost pet.
+   * @param {string} buddyData.type - The type of the lost pet.
+   * @param {string} buddyData.searchId - The ID of the search for the lost pet.
+   * @param {Function} callback - An optional callback function to be called after the email is sent.
+   * @return {Promise<Object>} A promise that resolves to the result of sending the email.
+   * @throws {Error} If there is an error sending the email.
    */
-  const getAllSearches = async () => {
+  const sendFoundEmail = useCallback(
+    async (buddyData, callback) => {
+      try {
+        setfoundEmail(true)
+        //get the current user data for the email 
+        const currentOwner = await ownerService.findOne(ownerId)
+        // get the buddy owner data for the email
+        const buddyOwnerId = buddyData.ownerId
+        const buddyOwner = await ownerService.findOne(buddyOwnerId)
+        const mailData = {
+          reply_to: currentOwner.email,
+          from_name: currentOwner.name,
+          to_name: buddyOwner.name,
+          pet_type: buddyData.type.toLowerCase(),
+          email: buddyOwner.email,
+          phoneNumber: buddyOwner.phoneNumber,
+          to_email: buddyOwner.email
+        }
+        //send found email
+        const emailResult = await email.sendFoundEmail(mailData)
+        // delete the existing search
+        await searchesService.deleteSearchbyId(buddyData.searchId)
+        // update the buddy
+        await buddyService.update(buddyData.ownerId, buddyData.buddyId, { ...buddyData, status: 'SAFE' })
 
+        Toast.success('Buddy labeled as found! Email sent to owner.')
+        callback && callback(true)
+        return emailResult;
+      } catch (error) {
+        Toast.error(error.message)
+      } finally {
+        setfoundEmail(false)
+      }
+    }, [])
+
+  /**
+   * Retrieves all searches based on the current location.
+   *
+   * @return {Promise<void>} - A promise that resolves when the searches are retrieved successfully.
+   * @throws {Error} - If there is an error retrieving the searches.
+   */
+  const getAllSearches = useCallback(async () => {
     try {
-      const locationService = LocationService.getInstance();
       const location = await locationService.getLocation();
-      const searchService = SearchService.getInstance();
       const result = await searchService.findAll(location.latitude, location.longitude);
       setSearches(result);
     } catch (error) {
-      throw error;
+      Toast.error(error.message)
     } finally {
       setLoading(false);
     }
-  };
+  }, [])
 
   /**
-   * Creates a new buddy using the provided buddy data.
+   * Creates a search for a lost buddy and updates the buddy's status to 'LOST'.
    *
-   * @param {Object} buddyData - The data of the buddy to be created.
-   * @param {string} buddyData.name - The name of the buddy.
-   * @param {string} buddyData.type - The type of the buddy (e.g. 'Dog', 'Cat').
-   * @param {string} buddyData.status - The status of the buddy (e.g. 'Safe', 'Lost').
-   * @return {Promise<Object>} A promise that resolves to an object with the following properties:
-   *   - `loading`: A boolean indicating whether the creation process is still ongoing.
-   *   - `result`: The result of the creation process, or `undefined` if the process is still ongoing.
-   * @throws {Error} If any of the required buddy data is missing.
+   * @param {Object} buddyData - The data of the lost buddy.
+   * @param {string} buddyData.name - The name of the lost buddy.
+   * @param {string} buddyData.type - The type of the lost buddy.
+   * @param {Function} callback - An optional callback function to be called after the search is created.
+   * @return {Promise<void>} A promise that resolves when the search is created and the buddy's status is updated.
+   * @throws {Error} If the buddy data is missing the name or type.
    */
-  const createSearch = async (buddyData, callback) => {
-    setLoadingCreate(true)
-    try {
-      if (!buddyData.name || !buddyData.type) { throw new Error('Missing buddy data') }
-      const searchId = uuid.v4();
-      const searchService = SearchService.getInstance();
-      const locationService = LocationService.getInstance();
-      const location = await locationService.getLocation();
-      result = await searchService.create(searchId, { ...location, ...buddyData })
-      const buddyService = BuddyService.getInstance();
-      await buddyService.update(buddyData.ownerId, buddyData.buddyId, { ...buddyData, status: 'LOST' })
-      callback && callback(true)
-    } catch (error) {
-      Toast.error(error.message)
-      throw error
-    }
-    finally {
-      setLoadingCreate(false)
-    }
-  }
+  const createSearch = useCallback(
+    async (buddyData, callback) => {
+      setLoadingCreate(true)
+      try {
+        if (!buddyData.name || !buddyData.type) { throw new Error('Missing buddy data') }
+        const searchId = uuid.v4();
+        result = await searchService.create(searchId, { ...location, ...buddyData })
+        await buddyService.update(buddyData.ownerId, buddyData.buddyId, { ...buddyData, status: 'LOST' })
+        Toast.success('Search created!')
+        callback && callback(true)
+      } catch (error) {
+        Toast.error(error.message)
+      }
+      finally {
+        setLoadingCreate(false)
+      }
+    }, [])
 
-  const foundBuddy = async (buddyData, callback) => {
-    try {
-      setFoundLoading(true)
-      const searchService = SearchService.getInstance();
-      await searchService.deleteSearchbyBuddyId(
-        buddyData.buddyId
-      )
-      const buddyService = BuddyService.getInstance();
-      const result = await buddyService.update(buddyData.ownerId, buddyData.buddyId, { ...buddyData, status: 'SAFE' })
-      Toast.success('Buddy found!')
-      callback && callback(result)
-    } catch (error) {
-      Toast.error(error.message)
-    } finally {
-      setFoundLoading(false)
-    }
-  }
+  /**
+   * Asynchronously marks a buddy as found and updates its status in the database.
+   *
+   * @param {Object} buddyData - An object containing the buddy's data, including its ID and owner's ID.
+   * @param {Function} [callback] - An optional callback function to be called with the updated buddy data.
+   * @return {Promise<void>} A promise that resolves when the buddy is marked as found and its status is updated.
+   * @throws {Error} If there is an error updating the buddy's status.
+   */
+  const foundBuddy = useCallback(
+    async (buddyData, callback) => {
+      try {
+        setFoundLoading(true)
+        await searchService.deleteSearchbyBuddyId(
+          buddyData.buddyId
+        )
+        const result = await buddyService.update(buddyData.ownerId, buddyData.buddyId, { ...buddyData, status: 'SAFE' })
+        Toast.success('Buddy found!')
+        callback && callback(result)
+      } catch (error) {
+        Toast.error(error.message)
+      } finally {
+        setFoundLoading(false)
+      }
+    }, [])
 
   useEffect(() => {
     setLoading(true);
@@ -145,14 +159,15 @@ const useSearches = () => {
 
 
   return {
-    searches,
-    createSearch, loadingCreate,
+    createSearch,
+    foundBuddy,
+    foundEmail,
+    foundLoading,
     getAllSearches,
     loading,
-    foundBuddy,
+    loadingCreate,
+    searches,
     sendFoundEmail,
-    foundEmail,
-    foundLoading
   };
 };
 
