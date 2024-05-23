@@ -44,7 +44,7 @@ const useBuddies = ({ ownerId }) => {
         callback && callback(true)
       } catch (error) {
         if (error.cause) {
-          setErrors(error)
+          setErrors(error.cause)
         } else {
           Toast.error(error.message)
         }
@@ -67,7 +67,6 @@ const useBuddies = ({ ownerId }) => {
       setBuddies(result);
     } catch (error) {
       Toast.error(error.message)
-      throw error;
     } finally {
       setLoading(false)
     }
@@ -95,7 +94,6 @@ const useBuddies = ({ ownerId }) => {
       return result
     } catch (error) {
       Toast.error(error.message)
-      throw error
     }
     finally {
       setDeleteBuddyLoading(false)
@@ -124,7 +122,11 @@ const useBuddies = ({ ownerId }) => {
         Toast.success('Updated')
         callback && callback(result)
       } catch (error) {
-        setErrors(error)
+        if (error.cause) {
+          setErrors(error.cause)
+        } else {
+          Toast.error(error.message)
+        }
       }
       finally {
         setUpdateBuddyLoading(false)

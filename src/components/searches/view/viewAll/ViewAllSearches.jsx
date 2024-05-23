@@ -12,9 +12,7 @@ import { Swipeable } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Card from '~/components/styledComponents/Card';
 import { COLORS } from '../../../../utils/constants';
-import SwipePencilIcon from '../../../styledComponents/swipables/SwipePencilIcon';
 import SwipeTickIcon from '../../../styledComponents/swipables/SwipeTickIcon';
-import SwipeTrashIcon from '../../../styledComponents/swipables/SwipeTrashIcon';
 import FoundBuddiesContainer from '../../found/FoundBuddiesContainer';
 /**
  * Renders a View displaying all the searches.
@@ -24,38 +22,8 @@ import FoundBuddiesContainer from '../../found/FoundBuddiesContainer';
  */
 const ViewAllBuddies = ({ searches, ownerId, getAllSearches }) => {
   const [loading, setLoading] = useState(false)
-  const [createModal, setCreateModal] = useState(false)
-  const [deleteModal, setDeleteModal] = useState(false)
   const [foundModal, setFoundModal] = useState(false)
-  const [editModal, setEditModal] = useState(false)
   const [buddyData, setBuddyData] = useState({})
-  const [lostModal, setLostModal] = useState(false)
-  const RenderRightActions = (buddyData) => {
-
-    return (
-      <View
-        style={{
-          width: '75%',
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100%',
-        }}
-      >
-        <SwipeTrashIcon onPress={_ => {
-          setBuddyData(buddyData)
-          setDeleteModal(true)
-
-        }} />
-        <SwipePencilIcon onPress={_ => {
-          setBuddyData(buddyData)
-          setEditModal(true)
-        }} />
-      </View>
-    );
-  };
-
-
   const RenderLeftFoundActions = (buddyData) => {
     return (
       <View
@@ -78,13 +46,7 @@ const ViewAllBuddies = ({ searches, ownerId, getAllSearches }) => {
   }
   return (
     <SafeAreaView style={{ height: '100%' }}>
-      <View style={{
-        flexDirection: 'row', justifyContent: 'flex-end', width: '100%',
-        paddingHorizontal: '10%',
-
-      }}>
-
-      </View>
+    
       <FlatList
         ListEmptyComponent={<View style={styles.noItemsAddButton} >
           <Text style={{ color: COLORS.primary, fontSize: 20 }}>Amazing news, no buddies lost nearby</Text>
@@ -116,7 +78,6 @@ const ViewAllBuddies = ({ searches, ownerId, getAllSearches }) => {
         renderItem={({ item }) => {
           return (
             <Swipeable
-              renderRightActions={() => RenderRightActions(item)}
               renderLeftActions={() => RenderLeftFoundActions(item)}
             >
               <Card>

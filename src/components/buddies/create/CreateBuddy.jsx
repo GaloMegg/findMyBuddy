@@ -1,31 +1,36 @@
-import { AntDesign } from '@expo/vector-icons';
 import { Modal, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { COLORS } from '../../../utils/constants';
-import useGetImagePicker from '../../../utils/images';
 import ActionButton from '../../styledComponents/ActionButton';
 import CancelButton from '../../styledComponents/CancelButton';
+import CloseButton from '../../styledComponents/CloseButton';
 import ProfileImageInput from '../../styledComponents/ProfileImageInput';
 import SelectInputComponent from '../../styledComponents/SelectInputComponent';
 import TextAreaCustom from '../../styledComponents/TextAreaCustom';
 import TextInputCustom from '../../styledComponents/TextInputCustom';
 import { BUDDIES_TYPE_OPTIONS } from '../helper';
+// import { styles } from './helper';
+
 
 /**
  * Renders a container component for creating buddies.
  *
  * @param {Object} props - The properties passed to the component.
+ * @param {boolean} props.loading - Indicates if the component is in a loading state.
  * @param {function} props.closeModal - The function to close the modal.
+ * @param {Object} props.buddyData - The data of the buddy being created.
+ * @param {function} props.setbuddyData - The function to update the buddy data.
+ * @param {function} props.onCreate - The function to create the buddy.
+ * @param {Object} props.errors - The errors object containing error messages.
+ * @param {function} props.pickImage - The function to pick an image.
  * @return {JSX.Element} The rendered container component.
  */
-const CreateBuddy = ({ loading, closeModal, buddyData, setbuddyData, onCreate, errors }) => {
-    const { pickImage } = useGetImagePicker();
+const CreateBuddy = ({ loading, closeModal, buddyData, setbuddyData, onCreate, errors, pickImage }) => {
     return (
         <Modal animationType='slide'
             transparent style={styles.modal}>
             <SafeAreaView style={styles.safeAreaView}>
-                <View style={styles.closeContainer}>
-
-                    <AntDesign name="closecircle" size={24} color="black" style={styles.closeContainer.closeButton} onPress={closeModal} />
+                <View style={styles.safeAreaView.closeModal}>
+                    <CloseButton onPress={closeModal} />
                 </View>
                 <ScrollView
                     automaticallyAdjustKeyboardInsets
@@ -82,7 +87,6 @@ const CreateBuddy = ({ loading, closeModal, buddyData, setbuddyData, onCreate, e
     )
 }
 export default CreateBuddy
-
 const styles = StyleSheet.create({
     modal: {
         backgroundColor: COLORS.WHITE,
@@ -104,7 +108,12 @@ const styles = StyleSheet.create({
         gap: 10,
         paddingVertical: 15,
         height: '100%',
+        width: '100%',
 
+        closeModal: {
+            alignSelf: 'flex-end',
+            paddingHorizontal: '10%'
+        },
         backgroundColor: COLORS.WHITE,
         scrollView: {
             text: { fontSize: 20 },

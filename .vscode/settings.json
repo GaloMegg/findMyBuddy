@@ -6,6 +6,7 @@
         "service",
         "data access",
         "components",
-        "multiscope"
+        "multiscope",
+        "hooks"
     ]
 }

@@ -222,19 +222,54 @@ const ViewAllBuddies = ({ buddies, ownerId, getAllBuddies }) => {
         />}
 
       {createModal && <CreateBuddiesContainer
-        closeModal={(refresh) => { setCreateModal(false); refresh && getAllBuddies(ownerId) }} />}
+        closeModal={async (refresh) => {
+          setCreateModal(false);
+          if (refresh) {
+            setLoading(true)
+            await getAllBuddies(ownerId)
+            setLoading(false)
+          }
+        }} />}
       {deleteModal && <DeleteBuddiesContainer
         buddyData={buddyData}
-        closeModal={(refresh) => { setDeleteModal(false); refresh && getAllBuddies(ownerId) }}
+        closeModal={async (refresh) => {
+          setDeleteModal(false);
+          if (refresh) {
+            setLoading(true)
+            await getAllBuddies(ownerId)
+            setLoading(false)
+          }
+        }}
       />}
       {editModal && <UpdateBuddiesContainer buddyDataInitialValue={buddyData}
-        closeModal={(refresh) => { setEditModal(false); refresh && getAllBuddies(ownerId) }} />}
+        closeModal={async (refresh) => {
+          setEditModal(false);
+          if (refresh) {
+            setLoading(true)
+            await getAllBuddies(ownerId)
+            setLoading(false)
+          }
+        }} />}
       {lostModal && <LostModalContainer
         buddyData={buddyData}
-        closeModal={(refresh) => { setLostModal(false); refresh && getAllBuddies(ownerId) }} />}
+        closeModal={async (refresh) => {
+          setLostModal(false);
+          if (refresh) {
+            setLoading(true)
+            await getAllBuddies(ownerId)
+            setLoading(false)
+          }
+        }} />}
       {foundModal && <FoundBuddiesContainer
         buddyData={buddyData}
-        closeModal={(refresh) => { setFoundModal(false); refresh && getAllBuddies(ownerId) }} />}
+        closeModal={async (refresh) => {
+          setFoundModal(false);
+          if (refresh) {
+            setLoading(true)
+            await getAllBuddies(ownerId)
+            setLoading(false)
+          }
+        }} />}
     </SafeAreaView >
   )
 }
