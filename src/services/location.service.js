@@ -26,9 +26,9 @@ export default class LocationService {
     async requestLocationPermission() {
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
-            console.error('Location permission not granted');
-            return;
+            throw new Error('Permission to access location was denied');
         }
+
     }
     /**
      * Asynchronously reverse geocodes the given latitude and longitude coordinates to retrieve
@@ -59,7 +59,9 @@ export default class LocationService {
             return location[0]
             // {"city": "Buenos Aires", "country": "Argentina", "district": "Comuna 2", "isoCountryCode": "AR", "name": "Avenida Córdoba 2077", "postalCode": "C1120", "region": "CABA", "street": "Avenida Córdoba", "streetNumber": "2077", "subregion": null, "timezone": "America/Argentina/Buenos_Aires"}
         } catch (error) {
-            console.error('Error fetching location:', error);
+
+          throw error
+
         }
     };
 
@@ -76,7 +78,41 @@ export default class LocationService {
             const { latitude, longitude } = location.coords;
             return { latitude, longitude }
         } catch (error) {
-            console.error('Error fetching location:', error);
+            throw error
         }
     };
+
+    /**
+     * Asynchronously retrieves the formatted address from the given latitude and longitude coordinates.
+     *
+     * @param {Object} coordinates - An object containing the latitude and longitude coordinates.
+     * @param {number} coordinates.latitude - The latitude coordinate to reverse geocode.
+     * @param {number} coordinates.longitude - The longitude coordinate to reverse geocode.
+     * @return {Promise<string>} A promise that resolves to the formatted address as a string.
+     */
+    async getFormattedLocation() {
+        await this.requestLocationPermission()
+        const location = await this.getLocation();
+        const address = await this.reverseGeocode(location);
+        const formattedAddres = formatAddress(address);
+        return formattedAddres
+    }
 }
+const formatAddress = (address) => {
+    const {
+        streetNumber,
+        street,
+        city,
+        district,
+        country,
+    } = address;
+    // Create an array to hold the address parts
+    const addressParts = [];
+    // Add each part to the array if it exists
+    if (streetNumber && street) addressParts.push(`${streetNumber} ${street}`);
+    if (district) addressParts.push(district);
+    if (city) addressParts.push(city);
+    if (country) addressParts.push(country);
+    // Join the parts with a comma and a space
+    return addressParts.join(', ');
+};

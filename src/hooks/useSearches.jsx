@@ -2,8 +2,11 @@ import { useEffect, useState } from 'react';
 import uuid from 'react-native-uuid';
 import { Toast } from 'toastify-react-native';
 import BuddyService from '../services/buddy.service';
+import EmailService from '../services/email.service';
 import LocationService from '../services/location.service';
+import OwnerService from '../services/owner.service';
 import SearchService from '../services/search.service';
+import useGetCurrentUser from './useGetCurrentUser';
 
 
 /**
@@ -14,11 +17,50 @@ import SearchService from '../services/search.service';
  * @return {Object} An object containing searches, a function to delete a buddy, and a loading state.
  */
 const useSearches = () => {
+  const { ownerId } = useGetCurrentUser()
   const [loadingCreate, setLoadingCreate] = useState(false)
   const [foundLoading, setFoundLoading] = useState(false)
+  const [foundEmail, setfoundEmail] = useState(false)
   const [searches, setSearches] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const sendFoundEmail = async (buddyData, callback) => {
+    try {
+      setfoundEmail(true)
+
+      const ownerService = OwnerService.getInstance();
+      const currentOwner = await ownerService.findOne(ownerId)
+
+      const buddyOwnerId = buddyData.ownerId
+      const buddyOwner = await ownerService.findOne(buddyOwnerId)
+
+      const email = EmailService.getInstance()
+
+      const mailData = {
+        reply_to: currentOwner.email,
+        from_name: currentOwner.name,
+        to_name: buddyOwner.name,
+        pet_type: buddyData.type.toLowerCase(),
+        email: buddyOwner.email,
+        phoneNumber: buddyOwner.phoneNumber,
+        to_email: buddyOwner.email
+      }
+
+      const emailResult = await email.sendFoundEmail(mailData)
+
+      const searchesService = SearchService.getInstance();
+      await searchesService.deleteSearchbyId(buddyData.searchId)
+      const buddyService = BuddyService.getInstance()
+      await buddyService.update(buddyData.ownerId, buddyData.buddyId, { ...buddyData, status: 'SAFE' })
+      Toast.success('Buddy labeled as found! Email sent to owner.')
+      callback && callback(true)
+      return emailResult;
+    } catch (error) {
+      throw error;
+    } finally {
+      setfoundEmail(false)
+    }
+  }
   /**
    * Retrieves all searches for a given owner ID.
    *
@@ -28,14 +70,12 @@ const useSearches = () => {
   const getAllSearches = async () => {
 
     try {
-      setLoading(true);
       const locationService = LocationService.getInstance();
       const location = await locationService.getLocation();
       const searchService = SearchService.getInstance();
       const result = await searchService.findAll(location.latitude, location.longitude);
       setSearches(result);
     } catch (error) {
-      console.error(error)
       throw error;
     } finally {
       setLoading(false);
@@ -74,6 +114,7 @@ const useSearches = () => {
       setLoadingCreate(false)
     }
   }
+
   const foundBuddy = async (buddyData, callback) => {
     try {
       setFoundLoading(true)
@@ -93,6 +134,7 @@ const useSearches = () => {
   }
 
   useEffect(() => {
+    setLoading(true);
     getAllSearches();
     return () => {
       setSearches([]);
@@ -108,6 +150,8 @@ const useSearches = () => {
     getAllSearches,
     loading,
     foundBuddy,
+    sendFoundEmail,
+    foundEmail,
     foundLoading
   };
 };

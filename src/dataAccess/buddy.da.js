@@ -127,7 +127,8 @@ export default class BuddyDA {
       }
       return true
     } catch (error) {
-      console.error('Error updating buddy document:', error);
+      
+      throw error;
     }
   }
 }

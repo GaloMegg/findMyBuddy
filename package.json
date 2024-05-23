@@ -20,6 +20,7 @@
     "@types/react": "~18.2.79",
     "babel-plugin-module-resolver": "^5.0.2",
     "buffer": "^6.0.3",
+    "emailjs-com": "^3.2.0",
     "expo": "~51.0.5",
     "expo-image-picker": "~15.0.4",
     "expo-location": "~17.0.1",

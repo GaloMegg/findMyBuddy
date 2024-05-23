@@ -33,7 +33,7 @@ export default class SearchService {
     try {
       return this.SearchDA.create(searchId, searchData);
     } catch (error) {
-      console.error(error)
+      throw error
     }
   }
   /**

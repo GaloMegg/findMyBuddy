@@ -23,7 +23,7 @@ export default function useGetImagePicker() {
             }
             return 'data:image/jpeg;base64,' + result.assets[0].base64
         } catch (error) {
-            console.error(error)
+            throw error
         }
     };
     return {

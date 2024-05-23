@@ -83,13 +83,10 @@ const useBuddies = ({ ownerId }) => {
       setUpdateBuddyLoading(true)
       validateBuddy(buddyData)
       const result = await buddyService.update(buddyData.ownerId, buddyData.buddyId, buddyData)
-      console.log(result)
       Toast.success('Updated')
-      console.log(callback)
       callback && callback(result)
     } catch (error) {
       setErrors(error)
-      console.log(error)
     }
     finally {
       setUpdateBuddyLoading(false)

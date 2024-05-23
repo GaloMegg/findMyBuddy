@@ -100,14 +100,13 @@ export default class SearchDA {
       const LostBuddies = [];
       querySnapshot.forEach((docSnap) => {
         const buddyData = docSnap.data();
-        buddyData.buddyId = docSnap.id;
+        buddyData.searchId = docSnap.id;
         LostBuddies.push(buddyData);
       });
 
       return LostBuddies;
     }
     catch (error) {
-      console.error('Error fetching pets:', error);
       throw error;
     }
   };
@@ -139,7 +138,6 @@ export default class SearchDA {
       }
       return lostBuddies;
     } catch (error) {
-      console.error('Error deleting buddy document:', error);
       throw error;
     }
   }
@@ -162,7 +160,6 @@ export default class SearchDA {
       // Check if the buddy document exists and belongs to the owner
       if (buddySnapshot.exists()) {
         // Delete the buddy document
-        console.log(buddySnapshot.data())
         await deleteDoc(searchRef);
       }
       return buddySnapshot.data()
@@ -194,7 +191,8 @@ export default class SearchDA {
         await setDoc(buddyRef, updatedData);
       }
     } catch (error) {
-      console.error('Error updating buddy document:', error);
+
+      throw error;
     }
   }
 }

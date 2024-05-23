@@ -13,7 +13,6 @@ import AuthNavigation from './authNavigation/AuthNavigation';
  */
 const Navigator = () => {
   const { ownerId } = useGetCurrentUser()
-  console.log(ownerId)
   return (
     <NavigationContainer theme={{ colors: { background: COLORS.WHITE }, }}>{
       ownerId ?

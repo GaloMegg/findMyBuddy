@@ -1,79 +1,191 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   FlatList,
+  Image,
+  SafeAreaView,
   StyleSheet,
   Text,
   Vibration,
   View
 } from 'react-native';
+import { Swipeable } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Card from '~/components/styledComponents/Card';
-
+import { COLORS } from '../../../../utils/constants';
+import SwipePencilIcon from '../../../styledComponents/swipables/SwipePencilIcon';
+import SwipeTickIcon from '../../../styledComponents/swipables/SwipeTickIcon';
+import SwipeTrashIcon from '../../../styledComponents/swipables/SwipeTrashIcon';
+import FoundBuddiesContainer from '../../found/FoundBuddiesContainer';
 /**
  * Renders a View displaying all the searches.
  *
  * @param {Props} searches - The list of searches to display
  * @return {JSX.Element} The View displaying all searches
  */
-const ViewAllSearches = ({ searches, ownerId, getAllSearches, loading }) => {
+const ViewAllBuddies = ({ searches, ownerId, getAllSearches }) => {
+  const [loading, setLoading] = useState(false)
+  const [createModal, setCreateModal] = useState(false)
+  const [deleteModal, setDeleteModal] = useState(false)
+  const [foundModal, setFoundModal] = useState(false)
+  const [editModal, setEditModal] = useState(false)
+  const [buddyData, setBuddyData] = useState({})
+  const [lostModal, setLostModal] = useState(false)
+  const RenderRightActions = (buddyData) => {
 
+    return (
+      <View
+        style={{
+          width: '75%',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%',
+        }}
+      >
+        <SwipeTrashIcon onPress={_ => {
+          setBuddyData(buddyData)
+          setDeleteModal(true)
+
+        }} />
+        <SwipePencilIcon onPress={_ => {
+          setBuddyData(buddyData)
+          setEditModal(true)
+        }} />
+      </View>
+    );
+  };
+
+
+  const RenderLeftFoundActions = (buddyData) => {
+    return (
+      <View
+
+        style={{
+          width: '37.5%',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100%',
+        }}
+      >
+
+        <SwipeTickIcon onPress={_ => {
+          setBuddyData(buddyData)
+          setFoundModal(true)
+        }} />
+      </View>
+    );
+  }
   return (
-    <View style={{ width: '100%' }}>
-      {
-        <FlatList
-          refreshing={loading}
-          onRefresh={_ => {
-            Vibration.vibrate(1);
-            getAllSearches(ownerId)
-          }}
-          contentContainerStyle={{ gap: 10, width: '100%', height: '100%', paddingHorizontal: 10, }}
-          numColumns={2}
-          columnWrapperStyle={{ gap: 10, justifyContent: 'space-around', flexDirection: 'row', width: '100%', }}
-          renderItem={({ item }) => {
-            return (
+    <SafeAreaView style={{ height: '100%' }}>
+      <View style={{
+        flexDirection: 'row', justifyContent: 'flex-end', width: '100%',
+        paddingHorizontal: '10%',
+
+      }}>
+
+      </View>
+      <FlatList
+        ListEmptyComponent={<View style={styles.noItemsAddButton} >
+          <Text style={{ color: COLORS.primary, fontSize: 20 }}>Amazing news, no buddies lost nearby</Text>
+          <Text style={{ color: COLORS.primary, fontSize: 20 }}>Try moving around, like Pokémon but IRL</Text>
+        </View>}
+        refreshing={loading}
+        numColumns={2}
+        onRefresh={async _ => {
+          setLoading(true)
+          Vibration.vibrate(1);
+          await getAllSearches(ownerId)
+          setLoading(false)
+        }}
+        contentContainerStyle={{
+          gap: 15,
+          minHeight: '100%',
+          paddingHorizontal: '10%',
+          marginBottom: '30%',
+          width: '100%',
+        }}
+
+        columnWrapperStyle={{
+          gap: 15,
+          justifyContent: 'flex-start',
+          flexDirection: 'row',
+          width: '100%',
+        }}
+
+        renderItem={({ item }) => {
+          return (
+            <Swipeable
+              renderRightActions={() => RenderRightActions(item)}
+              renderLeftActions={() => RenderLeftFoundActions(item)}
+            >
               <Card>
                 <View
                   style={{
-                    flexDirection: 'row',
-                    width: '60%',
+                    width: 150,
                     alignItems: 'center',
-                    justifyContent: 'space-around',
+                    justifyContent: 'flex-start',
                     height: '100%'
                   }}
                 >
-                  <View>
-                    <Text>Name: {item.name}</Text>
+                  <View style={{
+                    width: '100%', height: '50%',
+                    position: 'relative',
+                  }}>
 
-                    <View style={{ flexDirection: 'row', gap: 1, alignItems: 'center' }}>
-                      <Text>Status:</Text>
-                      <Icon name={item.status.toLowerCase() == 'LOST' ? 'alert' : 'home'} size={24} color="#000" />
+                    <Image source={{ uri: item.image }} style={{
+                      width: '100%',
+                      height: '100%',
+                      borderTopLeftRadius: 15, borderTopRightRadius: 15,
+                      position: 'absolute'
+                    }} />
+                  </View>
+
+                  <View style={{ padding: 10, width: '100%' }}>
+
+                    <View style={{
+                      flexDirection: 'row',
+                      gap: 5,
+                      alignItems: 'center'
+                    }}>
+
+                      <Text style={{ fontWeight: 'bold', fontSize: 18 }}>{item.name}</Text>
+                      {item.type && <Icon name={item.type.toLowerCase()} size={24} color="black" />}
                     </View>
-
-                    <View style={{ flexDirection: 'row', gap: 1, alignItems: 'center' }}>
-                      <Text>Type:</Text>
-                      <Icon name={item.type.toLowerCase()} size={24} color="#000" />
+                    <View style={{ gap: 5 }}>
+                      <Text>{item.age}</Text>
+                      <Text>{item.distinctiveMarkings}</Text>
                     </View>
                   </View>
+
                 </View>
               </Card>
-            )
-          }}
-          data={searches}
-          keyExtractor={
-            item =>
-              item.buddyId
-          }
-        />
+            </Swipeable >
 
-      }
+          )
+        }}
+        data={searches}
+        keyExtractor={
+          item =>
+            item.buddyId
+        }
+      />
 
-    </View >
+      {foundModal && <FoundBuddiesContainer
+        buddyData={buddyData}
+        closeModal={(refresh) => { setFoundModal(false); refresh && getAllSearches(ownerId) }} />}
+    </SafeAreaView >
   )
 }
 
-export default ViewAllSearches
+export default ViewAllBuddies
 
 const styles = StyleSheet.create({
-
+  noItemsAddButton: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 10
+  }
 })
 

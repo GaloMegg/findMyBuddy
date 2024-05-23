@@ -92,7 +92,6 @@ const SignUp = ({
               });
               navigation.replace(SCREENS_CONSTANTS.LOG_IN);
             } catch (errors) {
-              console.log(errors)
               setErrors(errors);
             }
           }}

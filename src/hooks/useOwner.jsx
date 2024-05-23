@@ -27,21 +27,6 @@ const useOwners = ({ ownerId }) => {
     }
   };
 
-  // const deleteowner = async (ownerData) => {
-  //   setLoading(true)
-  //   try {
-  //     //delete the owners too
-  //     if (!ownerData.name || !ownerData.type || !ownerData.status) { throw new Error('Missing owner data') }
-  //     result = await ownerService.delete(ownerData.ownerId, ownerData.ownerId)
-  //   } catch (error) {
-  //     console.error(error)
-  //     throw error
-  //   }
-  //   finally {
-  //     setLoading(false)
-  //   }
-  // }
-
 
   const updateowner = async (ownerData) => {
     setLoading(true)
@@ -49,30 +34,12 @@ const useOwners = ({ ownerId }) => {
       if (!ownerData.name || !ownerData.type || !ownerData.status) { throw new Error('Missing owner data') }
       result = await ownerService.update(ownerData.ownerId, ownerData.ownerId, ownerData)
     } catch (error) {
-      console.error(error)
       throw error
     }
     finally {
       setLoading(false)
     }
   }
-
-
-
-  // const createowner = async (ownerData) => {
-  //   setLoading(true)
-  //   try {
-  //     if (!ownerData.name || !ownerData.type || !ownerData.status) { throw new Error('Missing owner data') }
-  //     const ownerId = uuid.v4();
-  //     result = await ownerService.create(ownerId, ownerData)
-  //   } catch (error) {
-  //     console.error(error)
-  //     throw error
-  //   }
-  //   finally {
-  //     setLoading(false)
-  //   }
-  // }
 
   useEffect(() => {
     setLoading(true);
