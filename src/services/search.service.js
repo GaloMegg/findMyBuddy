@@ -18,16 +18,17 @@ export default class SearchService {
     return SearchService.instance; // return the instance that was either just created or is already existing
   }
   SearchDA = SearchDA.getInstance();
+
   /**
-   * Creates a new buddy document in the database.
+   * Asynchronously creates a new buddy document in the database.
    *
-   * @param {string} buddyId - The id of the buddy to create. This id should be the
+   * @param {string} searchId - The id of the buddy to create. This id should be the
    * owner's id.
-   * @param {Partial<IBuddy>} buddyData - The data of the buddy to create. This data
+   * @param {Partial<IBuddy>} searchData - The data of the buddy to create. This data
    * should include the name, bred, status and image of the buddy.
-   *
    * @return {Promise<void>} A promise that resolves when the document is successfully
    * added to the database.
+   * @throws {Error} If an error occurs while creating the document.
    */
   async create(searchId, searchData) {
     try {
@@ -36,24 +37,21 @@ export default class SearchService {
       throw error
     }
   }
+
   /**
-   * Retrieve all buddy documents of a specific owner from the database.
+   * Asynchronously finds all items based on latitude and longitude.
    *
-   * This method retrieves all buddy documents of the owner with the specified ID
-   * from the database.
-   *
-   * @param {string} ownerId - The ID of the owner of the buddies to retrieve.
-   * @return {Promise<ISearch[]>} A promise that resolves with an array of all
-   * buddies of the specified owner.
+   * @param {number} latitude - The latitude coordinate.
+   * @param {number} longitude - The longitude coordinate.
+   * @return {Promise<Array>} A promise that resolves to an array of items.
    */
   async findAll(latitude, longitude) {
     return this.SearchDA.findAll(latitude, longitude);
   }
 
   /**
-   * Deletes a buddy document from the database based on owner ID and buddy ID.
+   * Deletes a buddy document from the database based on buddy ID.
    *
-   * @param {string} ownerId - The ID of the owner.
    * @param {string} buddyId - The ID of the buddy document to delete.
    * @return {Promise<void>} A promise that resolves once the deletion is complete.
    */
@@ -62,24 +60,13 @@ export default class SearchService {
   }
 
   /**
-   * Deletes a buddy document from the database based on owner ID and buddy ID.
+   * Deletes a search document by its ID.
    *
-   * @param {string} ownerId - The ID of the owner.
-   * @param {string} buddyId - The ID of the buddy document to delete.
-   * @return {Promise<void>} A promise that resolves once the deletion is complete.
+   * @param {string} searchId - The ID of the search document to delete.
+   * @return {Promise<void>} A Promise that resolves once the search document is deleted.
+   * @throws {Error} If the search document does not exist or does not belong to the owner.
    */
   async deleteSearchbyId(searchId) {
     return await this.SearchDA.deleteSearchbyId(searchId);
-  }
-  /**
-   * Updates a buddy document in the database.
-   *
-   * @param {string} ownerId - The ID of the owner.
-   * @param {string} buddyId - The ID of the buddy document to update.
-   * @param {Object} buddyData - The data to update in the buddy document.
-   * @return {Promise<void>} A promise that resolves when the update is complete.
-   */
-  async update(ownerId, buddyId, buddyData) {
-    return await this.SearchDA.updateBuddy(ownerId, buddyId, buddyData)
   }
 }

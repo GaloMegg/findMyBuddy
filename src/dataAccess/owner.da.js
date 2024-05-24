@@ -4,7 +4,7 @@ import { DB } from '../clients/firebase.app';
 export default class OwnerDA {
   static instance;
   ENTITY_NAME = 'owners';
-  constructor() {}
+  constructor() { }
   /**
    * Retrieve the singleton instance of OwnerDA.
    *
@@ -53,5 +53,21 @@ export default class OwnerDA {
       throw Error(`Owner with id ${ownerId} does not exist`);
     }
     return docSnap.data();
+  }
+
+  async update(ownerId, ownerData) {
+    // Construct a reference to the owner document
+    const ownerRef = doc(DB, this.ENTITY_NAME, ownerId);
+    try {
+      // Retrieve the owner document to ensure it exists 
+      const ownerSnapShot = await getDoc(ownerRef);
+      // Merge the existing data with the new data
+      const updatedData = { ...ownerSnapShot.data(), ...ownerData };
+      // Update the owner document with the merged data
+      await setDoc(ownerRef, updatedData);
+      return true
+    } catch (error) {
+      throw error;
+    }
   }
 }

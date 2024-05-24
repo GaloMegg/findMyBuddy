@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Toast } from 'toastify-react-native';
 import OwnerService from '~/services/owner.service';
+import { validateOwner } from './helper';
 const ownerService = OwnerService.getInstance();
 
 
@@ -14,8 +15,9 @@ const ownerService = OwnerService.getInstance();
  */
 const useOwners = ({ ownerId }) => {
   const [owner, setOwner] = useState([]);
+  const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(true);
-
+  const [updateOwnerLoader, setUpdateOwnerLoader] = useState(false)
   /**
    * Finds and sets the owner data for a given owner ID.
    *
@@ -42,17 +44,23 @@ const useOwners = ({ ownerId }) => {
    * @return {Promise<void>} - A promise that resolves when the owner data is updated.
    * @throws {Error} - If the 'ownerData' parameter is missing the required 'name' or 'email' property.
    */
-  const updateowner = useCallback(
-    async (ownerData) => {
-      setLoading(true)
+  const updateOwner = useCallback(
+    async (ownerData, callback) => {
       try {
-        if (!ownerData.name || !ownerData.email) { throw new Error('Missing owner data') }
-        result = await ownerService.update(ownerData.ownerId, ownerData.ownerId, ownerData)
+        setUpdateOwnerLoader(true)
+        validateOwner(ownerData)
+        result = await ownerService.update(ownerData.ownerId, ownerData)
+        callback && callback(true)
       } catch (error) {
-        Toast.error(error.message)
+        console.log(error)
+        if (error.cause) {
+          setErrors(error.cause)
+        } else {
+          Toast.error(error.message)
+        }
       }
       finally {
-        setLoading(false)
+        setUpdateOwnerLoader(false)
       }
     }, []
   )
@@ -65,7 +73,7 @@ const useOwners = ({ ownerId }) => {
       setLoading(false)
     }
     return () => {
-      setOwner([]);
+      setOwner({});
       setLoading(true);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -75,7 +83,8 @@ const useOwners = ({ ownerId }) => {
     findOne,
     loading,
     owner,
-    updateowner,
+    updateOwnerLoader,
+    updateOwner, errors
   };
 };
 

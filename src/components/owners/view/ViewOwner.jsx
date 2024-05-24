@@ -4,9 +4,10 @@ import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { AUTH } from '../../../clients/firebase.app';
 import EditButton from '../../styledComponents/EditButton';
 import SignOutIcon from '../../styledComponents/SignOutIcon';
+import UpdateOwnerContainer from '../update/UpdateOwnerContainer';
 // {"email": "Galomeggiolarobul@gmail.com", "location": {"latitude": 0, "longitude": 0}, "name": "Gaño prueba", "ownerId": "55TmD9uRKQWzwtOq1aJr2i9TW8O2", "phoneNumber": "", profilePicture:''}
-const ViewOwner = ({ owner, logOut }) => {
-    const [editOwners, setEditOwners] = useState(false)
+const ViewOwner = ({ owner, logOut, findOne }) => {
+    const [editOwner, setEditOwner] = useState(false)
 
     return (
         <View style={{ alignItems: 'center', justifyContent: 'center', gap: 10 }}>
@@ -18,17 +19,15 @@ const ViewOwner = ({ owner, logOut }) => {
                 marginBottom: 10,
                 gap: 10
             }}>
-                <EditButton onPress={() => setEditOwners(true)} />
-
-                <SignOutIcon onPress={async () => await logOut(true)} />
+                <EditButton onPress={() => setEditOwner(true)} />
+                <SignOutIcon onPress={logOut} />
             </SafeAreaView>
-            {owner.profilePicture
+            {owner.image
                 ?
                 <Image
-                    source={{ uri: owner.profilePicture }}
+                    source={{ uri: owner.image }}
                     style={{ width: 150, height: 150, borderRadius: 300 }}
                     resizeMode='contain'
-
                 />
                 :
                 <FontAwesome name="user-circle-o" size={100} color="black" />
@@ -36,7 +35,7 @@ const ViewOwner = ({ owner, logOut }) => {
             <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center', }}>
 
                 <Text style={{ fontSize: 30 }}>{owner.name}</Text>
-                {AUTH.currentUser.emailVerified ?
+                {AUTH?.currentUser?.emailVerified ?
 
                     <MaterialIcons name="verified" size={24} color="black" />
                     :
@@ -54,22 +53,17 @@ const ViewOwner = ({ owner, logOut }) => {
                 <Entypo name="phone" size={14} color="black" />
                 <Text>{owner.phoneNumber || '-'}</Text>
             </View>
-
+            {editOwner && <UpdateOwnerContainer
+                closeModal={async (refresh) => {
+                    setEditOwner(false);
+                    if (refresh) {
+                        await findOne(owner.ownerId)
+                    }
+                }}
+                ownerInitialData={owner} />}
         </View>
     )
 }
 
 export default ViewOwner
 const styles = StyleSheet.create({})
-
-// city: The name of the city.
-//     country: The name of the country.
-//         district: The name of the district.
-//             isoCountryCode: The ISO country code.
-//                 name: The name of the location.
-//                     postalCode: The postal code.
-//                         region: The name of the region.
-//                             street: The name of the street.
-//                                 streetNumber: The street number.
-//                                     subregion: The name of the subregion(null if not available).
-// timezone: The timezone of the location

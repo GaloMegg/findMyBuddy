@@ -1,19 +1,19 @@
 import { useState } from 'react';
-import useBuddies from '../../../hooks/useBuddies';
-import UpdateBuddy from './UpdateOwner';
-
+import useOwners from '../../../hooks/useOwner';
+import UpdateOwner from './UpdateOwner';
 
 
 const UpdateOwnerContainer = ({ closeModal, ownerInitialData }) => {
   const [ownerData, setOwnerData] = useState(ownerInitialData)
-  const { updateBuddy , loading} = useBuddies({})
+  const { updateOwner, updateOwnerLoader, errors } = useOwners({})
   return (
-    <UpdateBuddy
-      onCreate={async () => {
-        await updateOwner(ownerData);
-        closeModal();
+    <UpdateOwner
+      onUpdate={async () => {
+        console.log(ownerData)
+        await updateOwner(ownerData, closeModal);
       }}
-      loading={loading}
+      errors={errors}
+      loading={updateOwnerLoader}
       closeModal={closeModal}
       ownerData={ownerData}
       setOwnerData={setOwnerData}

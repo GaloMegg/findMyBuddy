@@ -4,7 +4,9 @@ import { STACK } from '~/utils/navigations';
 import { SCREENS_CONSTANTS } from './helper';
 const AuthNavigation = () => {
     return (
-        <STACK.Navigator initialRouteName={SCREENS_CONSTANTS.LOG_IN} screenOptions={{
+        <STACK.Navigator initialRouteName={SCREENS_CONSTANTS.LOG_IN}
+        name='LOGIN' 
+        screenOptions={{
             headerShown: false,
         }}>
             <STACK.Screen name={SCREENS_CONSTANTS.LOG_IN} component={LogInContainer} />

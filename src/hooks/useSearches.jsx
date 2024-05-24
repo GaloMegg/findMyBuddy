@@ -12,7 +12,6 @@ const email = EmailService.getInstance()
 const locationService = LocationService.getInstance();
 const ownerService = OwnerService.getInstance();
 const searchService = SearchService.getInstance();
-const searchesService = SearchService.getInstance();
 
 /**
  * Returns an object containing searches, a function to delete a buddy, and a loading state.
@@ -62,7 +61,7 @@ const useSearches = () => {
         //send found email
         const emailResult = await email.sendFoundEmail(mailData)
         // delete the existing search
-        await searchesService.deleteSearchbyId(buddyData.searchId)
+        await searchService.deleteSearchbyId(buddyData.searchId)
         // update the buddy
         await buddyService.update(buddyData.ownerId, buddyData.buddyId, { ...buddyData, status: 'SAFE' })
 

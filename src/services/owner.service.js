@@ -38,4 +38,14 @@ export default class OwnerService {
     return await this.ownerDA.findOne(ownerId);
   }
 
+  /**
+   * Asynchronously updates the owner with the specified ownerId using the provided ownerData.
+   *
+   * @param {string} ownerId - The ID of the owner to update.
+   * @param {object} ownerData - The data to update the owner with.
+   * @return {Promise<object>} A Promise that resolves with the updated owner data.
+   */
+  async update(ownerId, ownerData) {
+    return await this.ownerDA.update(ownerId, ownerData)
+  }
 }

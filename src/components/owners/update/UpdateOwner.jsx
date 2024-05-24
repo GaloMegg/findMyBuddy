@@ -1,9 +1,11 @@
-import { AntDesign } from '@expo/vector-icons';
-import { Button, Modal, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-import Loader from '../../styledComponents/Loader';
-import SelectInputComponent from '../../styledComponents/SelectInputComponent';
+import { Modal, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
+import { COLORS } from '../../../utils/constants';
+import useGetImagePicker from '../../../utils/images';
+import ActionButton from '../../styledComponents/ActionButton';
+import CancelButton from '../../styledComponents/CancelButton';
+import CloseButton from '../../styledComponents/CloseButton';
+import ProfileImageInput from '../../styledComponents/ProfileImageInput';
 import TextInputCustom from '../../styledComponents/TextInputCustom';
-import { BUDDIES_STATUS_OPTIONS, BUDDIES_TYPE_OPTIONS } from '../helper';
 
 /**
  * Renders a container component for creating buddies.
@@ -12,51 +14,109 @@ import { BUDDIES_STATUS_OPTIONS, BUDDIES_TYPE_OPTIONS } from '../helper';
  * @param {function} props.closeModal - The function to close the modal.
  * @return {JSX.Element} The rendered container component.
  */
-const UpdateBuddy = ({ loading, closeModal, buddyData, setbuddyData, onCreate }) => {
-    if (loading) return <Modal>
-        <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-            <Loader />
-        </SafeAreaView>
-    </Modal>
+const UpdateOwner = ({ loading, closeModal, ownerData, setOwnerData, onUpdate, errors }) => {
+    const { pickImage } = useGetImagePicker()
     return (
-        <Modal style={{}}>
-            <SafeAreaView style={{}}>
-                <AntDesign name="closecircle" size={24} color="black" style={{ gap: 10, width: '100%', alignItems: 'flex-start', paddingHorizontal: '10%' }} onPress={closeModal} />
-            </SafeAreaView>
-            <SafeAreaView style={{
-                gap: 10,
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: '80%'
-            }}>
-                <ScrollView contentContainerStyle={{ gap: 10, alignItems: 'center', justifyContent: 'center', height: '100%' }}
-                    style={{ width: '100%', }}>
-
-                    <Text style={{ fontSize: 20 }}>Create a new buddy</Text>
-                    <View style={{
-                        gap: 10,
-                        width: '100%',
-                        alignItems: 'center',
-                        paddingHorizontal: '10%',
-                    }}>
+        <Modal animationType='slide'
+            transparent style={styles.modal}>
+            <SafeAreaView style={styles.safeAreaView}>
+                <View style={styles.closeContainer}>
+                    <CloseButton onPress={closeModal} />
+                </View>
+                <ScrollView
+                    automaticallyAdjustKeyboardInsets
+                    contentContainerStyle={styles.safeAreaView.scrollView.contentContainer}
+                    style={styles.safeAreaView.scrollView.container}>
+                    <View style={styles.safeAreaView.scrollView.formContainer}>
+                        <ProfileImageInput
+                            onPress={async () => {
+                                const item = await pickImage()
+                                setOwnerData({ ...ownerData, image: item })
+                            }}
+                            value={ownerData.image}
+                        />
                         <TextInputCustom
                             label="Name"
-                            value={buddyData.name}
-                            onChangeText={(item) => setbuddyData({ ...buddyData, name: item })}
+                            value={ownerData.name}
+                            onChangeText={(item) => setOwnerData({ ...ownerData, name: item })}
+                            error={errors.name}
+
                         />
-                        <SelectInputComponent label='Type' value={buddyData.type} options={BUDDIES_TYPE_OPTIONS} onSelect={item => setbuddyData({ ...buddyData, type: item.title.toUpperCase() })} />
-                        <SelectInputComponent label='Status' options={BUDDIES_STATUS_OPTIONS} value={buddyData.status} onSelect={item => setbuddyData({ ...buddyData, status: item.title.toUpperCase() })} />
+                        <TextInputCustom
+                            label="Email"
+                            value={ownerData?.email}
+                            onChangeText={(item) => setOwnerData({ ...ownerData, email: item })}
+                            error={errors.email}
+
+                        />
+                        <TextInputCustom
+                            label="Phone number"
+                            value={ownerData?.phoneNumber}
+                            onChangeText={(item) => setOwnerData({ ...ownerData, phoneNumber: item })}
+                            error={errors?.phoneNumber}
+
+                        />
                     </View>
-                    <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'center' }}>
-                        <Button title='Cancel' onPress={closeModal} />
-                        <Button title='Update' onPress={onCreate} />
+                    <View style={styles.safeAreaView.scrollView.buttonContainer}>
+                        <View style={styles.safeAreaView.scrollView.buttonContainer.button}>
+                            <CancelButton text='Cancel' onPress={closeModal} />
+                        </View>
+                        <View style={styles.safeAreaView.scrollView.buttonContainer.button}>
+                            <ActionButton loading={loading}
+                                disabled={loading}
+                                text='Update' onPress={onUpdate} />
+                        </View>
                     </View>
                 </ScrollView>
-
             </SafeAreaView>
-
         </Modal >
     )
 }
-export default UpdateBuddy
-const styles = StyleSheet.create({})
+export default UpdateOwner
+
+const styles = StyleSheet.create({
+    modal: {
+        backgroundColor: COLORS.WHITE,
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 10
+    },
+    closeContainer: {
+        gap: 10,
+        width: '100%',
+        alignItems: 'flex-end',
+        paddingHorizontal: '10%',
+        closeButton: {
+        }
+    },
+    safeAreaView: {
+        gap: 10,
+        paddingVertical: 15,
+        height: '100%',
+
+        backgroundColor: COLORS.WHITE,
+        scrollView: {
+            text: { fontSize: 20 },
+            container: { width: '100%', },
+            contentContainer: {
+                gap: 10,
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100%',
+                height: '80%'
+            },
+            buttonContainer: {
+                flexDirection: 'row', gap: 10, justifyContent: 'center', width: '100%',
+                button: { flexDirection: 'row', gap: 10, justifyContent: 'center', width: '35%' }
+            },
+            formContainer: {
+                gap: 10,
+                width: '100%',
+                alignItems: 'center',
+                paddingHorizontal: '10%',
+            },
+        }
+    }
+})

@@ -37,7 +37,7 @@ const LogIn = ({ email, password, setUserDataHandler, route, navigation }) => {
       gap: 10
     }}>
       <Image style={{ width: 200, height: 200 }} source={{ uri: LOGIN_IMAGE }} />
-      
+
       <View style={styles.inputs} >
         {/* Email input */}
         <TextInputCustom
@@ -70,7 +70,7 @@ const LogIn = ({ email, password, setUserDataHandler, route, navigation }) => {
                 await insertSession(ownerId)
               } catch (error) {
                 setErrors(error)
-              }finally{
+              } finally {
                 setLoading(false)
               }
             }}

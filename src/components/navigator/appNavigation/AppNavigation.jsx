@@ -8,8 +8,8 @@ import { APP_NAVIGATION } from './helper';
  */
 const AppNavigation = () => {
     return (
-        <TAB.Navigator initialRouteName="Home"
-
+        <TAB.Navigator
+            initialRouteName="Home"
             screenOptions={{
                 headerShown: false,
                 tabBarStyle: {
@@ -17,7 +17,6 @@ const AppNavigation = () => {
                 },
                 tabBarActiveTintColor: COLORS.LIGHTEST_BROWN,
                 tabBarInactiveTintColor: COLORS.LIGH_BROWN,
-
             }}
 
         >

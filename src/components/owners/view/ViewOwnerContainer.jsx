@@ -3,18 +3,24 @@ import useGetCurrentUser from '../../../hooks/useGetCurrentUser'
 import useOwners from '../../../hooks/useOwner'
 import Loader from '../../styledComponents/Loader'
 import ViewOwner from './ViewOwner'
-const ViewOwnerContainer = () => {
+const ViewOwnerContainer = ({ navigation }) => {
     const { ownerId, logOut } = useGetCurrentUser()
-    const { loading, findOne, owner, } = useOwners({ ownerId })
-
+    const { loading, findOne, owner } = useOwners({ ownerId })
+    console.log(owner)
 
     if (loading) return <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
         <Loader />
     </SafeAreaView>
 
-    return (
+    return ( 
         <SafeAreaView>
-            <ViewOwner owner={owner} logOut={logOut} />
+            <ViewOwner
+                owner={owner}
+                logOut={() => {
+                    logOut()
+                }}
+                findOne={findOne}
+            />
         </SafeAreaView>
     )
 }
