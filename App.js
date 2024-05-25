@@ -10,6 +10,11 @@ import { COLORS } from './src/utils/constants';
 (async () => {
   await setupDatabase()
 })()
+/**
+ * Renders the main application component.
+ *
+ * @return {JSX.Element} The rendered application component.
+ */
 export default function App() {
   return (
     <GestureHandlerRootView >

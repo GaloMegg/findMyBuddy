@@ -6,7 +6,6 @@ import ViewOwner from './ViewOwner'
 const ViewOwnerContainer = ({ navigation }) => {
     const { ownerId, logOut } = useGetCurrentUser()
     const { loading, findOne, owner } = useOwners({ ownerId })
-
     if (loading) return <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
         <Loader />
     </SafeAreaView>

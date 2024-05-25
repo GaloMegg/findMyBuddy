@@ -2,6 +2,16 @@ import React from 'react'
 import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native'
 import { COLORS } from '../../utils/constants'
 
+/**
+ * Renders a CancelButton component.
+ *
+ * @param {Object} props - The properties for the CancelButton component.
+ * @param {string} props.text - The text to display on the button.
+ * @param {function} props.onPress - The function to call when the button is pressed.
+ * @param {boolean} props.disabled - Whether the button is disabled.
+ * @param {boolean} props.loading - Whether the button is in a loading state.
+ * @return {JSX.Element} The rendered CancelButton component.
+ */
 const CancelButton = ({ text, onPress, disabled, loading }) => {
     return (
         <Pressable

@@ -2,6 +2,14 @@ import { FontAwesome } from '@expo/vector-icons'
 import React from 'react'
 import { Image, StyleSheet, TouchableOpacity } from 'react-native'
 
+/**
+ * Renders a profile image input component.
+ *
+ * @param {Object} props - The component props.
+ * @param {string} props.value - The URI of the image to display. If empty, a default icon is displayed.
+ * @param {function} props.onPress - The function to be called when the component is pressed.
+ * @return {JSX.Element} The rendered profile image input component.
+ */
 const ProfileImageInput = ({ value, onPress }) => {
     if (!value) {
         return (

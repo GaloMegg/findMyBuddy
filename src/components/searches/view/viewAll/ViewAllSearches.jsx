@@ -15,11 +15,15 @@ import LocationService from '../../../../services/location.service';
 import { COLORS } from '../../../../utils/constants';
 import SwipeTickIcon from '../../../styledComponents/swipables/SwipeTickIcon';
 import FoundBuddiesContainer from '../../found/FoundBuddiesContainer';
+
 /**
- * Renders a View displaying all the searches.
+ * Renders a view displaying all the buddies.
  *
- * @param {Props} searches - The list of searches to display
- * @return {JSX.Element} The View displaying all searches
+ * @param {Object} props - The props object.
+ * @param {Array} props.searches - The list of searches to display.
+ * @param {string} props.ownerId - The ID of the owner.
+ * @param {Function} props.getAllSearches - The function to get all searches.
+ * @return {JSX.Element} The view displaying all buddies.
  */
 const ViewAllBuddies = ({ searches, ownerId, getAllSearches }) => {
   const [loading, setLoading] = useState(false)

@@ -6,7 +6,7 @@ import Navigator from './Navigator';
 
 
 /**
- * Renders a navigator component
+ * Renders a navigator container component
  *
  * @return {JSX.Element} The rendered navigator component.
  */

@@ -26,6 +26,7 @@
 ## Future Features:
 - Push notifications
 - Distance range dynamic
+- NFC tags on pets collars (cheaper than an airtag)
 
 ## Contributors:
 - [Galo Meggiolaro](https://github.com/GaloMegg)

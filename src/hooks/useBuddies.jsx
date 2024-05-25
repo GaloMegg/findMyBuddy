@@ -138,13 +138,10 @@ const useBuddies = ({ ownerId }) => {
     if (ownerId) {
       getAllBuddies(ownerId);
     }
-
-
     return () => {
       setBuddies([]);
       setLoading(true);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ownerId]);
 
   return {

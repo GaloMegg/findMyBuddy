@@ -4,6 +4,17 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { COLORS } from '../../utils/constants';
 import TextError from './TextError';
 
+/**
+ * Renders a select input component with a label, dropdown options, and error handling.
+ *
+ * @param {Object} props - The component props.
+ * @param {Array} props.options - The options to be displayed in the dropdown.
+ * @param {string} props.label - The label for the select input.
+ * @param {Function} props.onSelect - The callback function to handle select events.
+ * @param {string} props.value - The selected value in the dropdown.
+ * @param {string} props.error - The error message to display.
+ * @return {JSX.Element} The rendered select input component.
+ */
 const SelectInputComponent = ({ options, label, onSelect, value, error }) => {
     return (
         <View style={styles.container}>

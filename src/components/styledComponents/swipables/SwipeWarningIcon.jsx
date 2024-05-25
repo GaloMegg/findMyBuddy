@@ -2,6 +2,12 @@ import { Pressable, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { COLORS } from '../../../utils/constants';
 
+/**
+ * Renders a SwipeWarningIcon component that can be pressed.
+ *
+ * @param {Function} onPress - The function to be called when the component is pressed.
+ * @return {JSX.Element} The rendered SwipeWarningIcon component.
+ */
 const SwipeWarningIcon = ({ onPress }) => {
     return (
         <Pressable

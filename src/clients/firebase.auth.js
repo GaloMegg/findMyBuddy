@@ -2,7 +2,6 @@ import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailA
 import { Toast } from 'toastify-react-native';
 import { AUTH } from './firebase.app';
 
-
 /**
  * Creates an account with the given email and password.
  *

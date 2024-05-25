@@ -15,6 +15,11 @@ export const firebaseConfig = {
   measurementId: process.env.EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
+/**
+ * Initializes and returns an instance of Firebase with the provided configuration.
+ *
+ * @return {Object} An object containing the initialized Firebase app, auth, firestore, and geofirestore instances.
+ */
 const intanceFirebase = () => {
   const APP = initializeApp(firebaseConfig);
   const AUTH = initializeAuth(APP, {

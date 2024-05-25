@@ -1,5 +1,14 @@
 import * as SQLite from 'expo-sqlite';
 const db = SQLite && SQLite.openDatabase("sessions.db")
+/**
+ * Sets up the database by creating a table called "sessions" with a single column
+ * called "tokenId" of type TEXT and PRIMARY KEY constraint. If the table already
+ * exists, it does nothing.
+ *
+ * @return {Promise<object>} A promise that resolves with the result of the SQL
+ * query execution, or rejects with an error if there was an issue executing the
+ * query.
+ */
 const setupDatabase = async () => {
     const promise = new Promise((resolve, reject) => {
         db.transaction((tx) => {
@@ -14,7 +23,12 @@ const setupDatabase = async () => {
     return promise
 };
 
-// Insert a new session with provided tokenId
+/**
+ * Inserts a new session with the provided tokenId into the sessions table.
+ *
+ * @param {string} tokenId - The tokenId to be inserted into the sessions table.
+ * @return {Promise} A promise that resolves with the result of the transaction or rejects with an error.
+ */
 const insertSession = (tokenId) => {
     const promise = new Promise((resolve, reject) => {
         db.transaction(tx => {
@@ -30,7 +44,11 @@ const insertSession = (tokenId) => {
 
 };
 
-// Get all sessions
+/**
+ * Retrieves all sessions from the database.
+ *
+ * @return {Promise<object>} A promise that resolves with the result of the transaction or rejects with an error.
+ */
 const getSessions = () => {
     const promise = new Promise((resolve, reject) => {
         db.transaction((tx) => {
@@ -47,7 +65,11 @@ const getSessions = () => {
 };
 
 
-// Truncate the sessions table
+/**
+ * Deletes all sessions from the database.
+ *
+ * @return {Promise<object>} A promise that resolves with the result of the transaction or rejects with an error.
+ */
 const deleteSession = () => {
     const promise = new Promise((resolve, reject) => {
         db.transaction((tx) => {
@@ -63,3 +85,4 @@ const deleteSession = () => {
 };
 
 export { deleteSession, getSessions, insertSession, setupDatabase };
+

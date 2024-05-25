@@ -24,11 +24,15 @@ import { FontAwesome } from '@expo/vector-icons';
 import { COLORS } from '../../../../utils/constants';
 import SwipeTickIcon from '../../../styledComponents/swipables/SwipeTickIcon';
 import FoundBuddiesContainer from '../../found/FoundBuddiesContainer';
+
 /**
  * Renders a View displaying all the buddies.
  *
- * @param {Props} buddies - The list of buddies to display
- * @return {JSX.Element} The View displaying all buddies
+ * @param {Object} props - The props object containing the buddies, ownerId, and getAllBuddies function.
+ * @param {Array} props.buddies - The list of buddies to display.
+ * @param {string} props.ownerId - The ID of the owner.
+ * @param {Function} props.getAllBuddies - The function to get all buddies.
+ * @return {JSX.Element} The View displaying all buddies.
  */
 const ViewAllBuddies = ({ buddies, ownerId, getAllBuddies }) => {
   const [loading, setLoading] = useState(false)

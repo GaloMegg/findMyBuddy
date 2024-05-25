@@ -10,6 +10,7 @@ import ViewAllSearches from './ViewAllSearches'
  * Renders the ViewAllSearchesContainer component.
  *
  * @param {object} props - The props object.
+ * @param {object} props.navigation - The navigation object.
  * @return {JSX.Element} The rendered ViewAllSearchesContainer component.
  */
 const ViewAllSearchesContainer = ({ navigation }) => {
