@@ -83,14 +83,14 @@ const useSearches = () => {
   const getAllSearches = useCallback(async () => {
     try {
       const location = await locationService.getLocation();
-      const result = await searchService.findAll(location.latitude, location.longitude);
+      const result = await searchService.findAll(ownerId, location.latitude, location.longitude);
       setSearches(result);
     } catch (error) {
       Toast.error(error.message)
     } finally {
       setLoading(false);
     }
-  }, [])
+  }, [ownerId])
 
   /**
    * Creates a search for a lost buddy and updates the buddy's status to 'LOST'.

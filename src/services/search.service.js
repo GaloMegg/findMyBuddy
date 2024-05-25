@@ -45,8 +45,8 @@ export default class SearchService {
    * @param {number} longitude - The longitude coordinate.
    * @return {Promise<Array>} A promise that resolves to an array of items.
    */
-  async findAll(latitude, longitude) {
-    return this.SearchDA.findAll(latitude, longitude);
+  async findAll(ownerId,latitude, longitude) {
+    return this.SearchDA.findAll(ownerId, latitude, longitude);
   }
 
   /**

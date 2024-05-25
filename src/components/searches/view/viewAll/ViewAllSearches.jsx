@@ -72,7 +72,7 @@ const ViewAllBuddies = ({ searches, ownerId, getAllSearches }) => {
                   </View>
 
                   <View style={styles.info.container}>
-                    <View style={styles.info.name}>
+                    <View style={styles.info.name.container}>
                       <Text style={styles.info.name.text}>{item.name}</Text>
                       {item.type && <Icon name={item.type.toLowerCase()} size={24} color="black" />}
                     </View>

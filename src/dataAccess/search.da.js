@@ -66,7 +66,7 @@ export default class SearchDA {
    */
 
 
-  async findAll(latitude, longitude) {
+  async findAll(ownerId, latitude, longitude) {
 
     try {
       // Calculate latitude and longitude bounds for the query
@@ -90,7 +90,8 @@ export default class SearchDA {
         where('latitude', '>=', minLat),
         where('latitude', '<=', maxLat),
         where('longitude', '>=', minLon),
-        where('longitude', '<=', maxLon)
+        where('longitude', '<=', maxLon),
+        where('ownerId', '!=', ownerId)
       );
 
       // Execute the query

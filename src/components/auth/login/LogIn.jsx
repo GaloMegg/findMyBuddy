@@ -1,7 +1,10 @@
+import { sendPasswordResetEmail } from 'firebase/auth';
 import React, { useState } from 'react';
 import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
+import { Toast } from 'toastify-react-native';
 import { SCREENS_CONSTANTS } from '~/components/navigator/authNavigation/helper.js';
+import { AUTH } from '../../../clients/firebase.app';
 import { loginWithEmailAndPassword } from '../../../clients/firebase.auth';
 import { insertSession } from '../../../clients/sqlDataBase';
 import { setUser } from '../../../store/features/userSlice.slice';
@@ -69,7 +72,24 @@ const LogIn = ({ email, password, setUserDataHandler, route, navigation }) => {
                 dispatch(setUser({ ownerId }));
                 await insertSession(ownerId)
               } catch (error) {
-                setErrors(error)
+                console.log(error)
+                if (error.cause) {
+                  setErrors(error.cause)
+                } else {
+                  if (error.message.includes('auth/invalid-credential')) {
+                    setErrors({ email: 'Invalid email or password' })
+                    return
+                  }
+                  if (
+                    error.message.includes('auth/too-many-requests')
+                  ) {
+                    Toast.error('Too many requests')
+                    setErrors({ email: 'Change your password. Check your inbox.' })
+                    await sendPasswordResetEmail(AUTH, email)
+                    return
+                  }
+                  Toast.error(error.message)
+                }
               } finally {
                 setLoading(false)
               }

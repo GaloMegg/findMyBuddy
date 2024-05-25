@@ -58,11 +58,7 @@ export const loginWithEmailAndPassword = async (email, password) => {
     }
     return userCredential
   } catch (error) {
-    if (error.cause) {
-      setErrors(error.cause)
-    } else {
-      Toast.error(error.message)
-    }
+    throw error
   }
 }
 

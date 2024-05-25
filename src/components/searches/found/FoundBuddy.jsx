@@ -22,7 +22,7 @@ const FoundBuddy = ({ loading, closeModal, onLabelAsSafe }) => {
                 </View>
                 <ScrollView contentContainerStyle={styles.safeAreaView.scrollView.container}
                     style={styles.safeAreaView.scrollView.style}>
-                    <View style={{width: '80%'}} >
+                    <View style={{ width: '80%' }} >
 
                         <View style={{
                             alignItems: 'center', justifyContent: 'center'
@@ -36,7 +36,8 @@ const FoundBuddy = ({ loading, closeModal, onLabelAsSafe }) => {
                             <Text>?</Text>
                         </View>
                         <Text style={{ width: '100%', textAlign: 'center' }}>This action will delete all the active searches and share your information <Text style={{ fontWeight: 'bold' }}>
-                            ( email, phone, and approximate location ) with the buddy owner</Text>
+                            ( email, phone, and approximate location ) </Text>
+                            with the buddy owner
                         </Text>
                     </View>
 
