@@ -1,6 +1,9 @@
-import useGetBuddies from 'hooks/useGetBuddies'
 import React from 'react'
-import { StyleSheet, Text } from 'react-native'
+import { StyleSheet } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import useBuddies from '~/hooks/useBuddies'
+import useGetCurrentUser from '../../../../hooks/useGetCurrentUser'
+import Loader from '../../../styledComponents/Loader'
 import ViewAllBuddies from './ViewAllBuddies'
 
 /**
@@ -9,15 +12,22 @@ import ViewAllBuddies from './ViewAllBuddies'
  * @param {object} props - The props object.
  * @return {JSX.Element} The rendered ViewAllBuddiesContainer component.
  */
-const ViewAllBuddiesContainer = ({ }) => {
-  const { buddies, deleteBuddy, loading } = useGetBuddies({
-    ownerId: 'r85AaNEsNBe5xkMs67E1eaxQYGg1',
-  })
+const ViewAllBuddiesContainer = ({ navigation }) => {
+  const { ownerId } = useGetCurrentUser()
+  const { buddies, getAllBuddies, loading,  } = useBuddies({ ownerId, })
   if (loading)
     return (
-      <Text>Loading</Text>
+      <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Loader />
+      </SafeAreaView>
     )
-  return <ViewAllBuddies buddies={buddies} />
+  return <SafeAreaView >
+    <ViewAllBuddies
+      ownerId={ownerId}
+      getAllBuddies={getAllBuddies}
+      buddies={buddies}
+      navigation={navigation} />
+  </SafeAreaView>
 }
 
 export default ViewAllBuddiesContainer

@@ -1,10 +1,25 @@
 import React from 'react';
-import SignUp from './LogIn';
+import { SafeAreaView } from 'react-native';
+import LogIn from './LogIn';
 import useUserData from './useUserData';
 
-const LogInContainer = () => {
+/**
+ * Renders the LogIn component within a Stack.Screen component named "Log in" with user data and handler function as props.
+ *
+ * @return {JSX.Element} The rendered LogIn component within Stack.Screen
+ */
+const LogInContainer = ({ route, navigation }) => {
   const { userData, setUserDataHandler } = useUserData();
-  return <SignUp {...userData} setUserDataHandler={setUserDataHandler} />;
+  return (
+    <SafeAreaView>
+      <LogIn
+        {...userData}
+        setUserDataHandler={setUserDataHandler}
+        route={route}
+        navigation={navigation}
+      />
+    </SafeAreaView>
+  );
 };
 
 export default LogInContainer;

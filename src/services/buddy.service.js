@@ -1,5 +1,4 @@
 import BuddyDA from '../dataAccess/buddy.da';
-import { IBuddy } from '../models/buddy.model';
 
 export default class BuddyService {
   static instance;
@@ -45,5 +44,20 @@ export default class BuddyService {
    */
   async findAll(ownerId) {
     return this.BuddyDA.findAll(ownerId);
+  }
+
+  /**
+   * Deletes a buddy document from the database based on owner ID and buddy ID.
+   *
+   * @param {string} ownerId - The ID of the owner.
+   * @param {string} buddyId - The ID of the buddy document to delete.
+   * @return {Promise<void>} A promise that resolves once the deletion is complete.
+   */
+  async delete(ownerId, buddyId) {
+    return await this.BuddyDA.deleteBuddy(ownerId, buddyId);
+  }
+
+  async update(ownerId, buddyId, buddyData) {
+    return await this.BuddyDA.updateBuddy(ownerId, buddyId, buddyData)
   }
 }

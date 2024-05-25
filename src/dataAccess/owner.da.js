@@ -1,6 +1,5 @@
-import { DB } from 'clients/firebase.app';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { IOwner } from 'models/owner.model';
+import { DB } from '../clients/firebase.app';
 
 export default class OwnerDA {
   static instance;
@@ -32,10 +31,7 @@ export default class OwnerDA {
    * @param {Partial<IOwner>} ownerData - The data of the owner to create
    * @return {Promise<void>} A promise that resolves when the document is successfully added
    */
-  async create(
-    ownerId,
-    ownerData,
-  ) {
+  async create(ownerId, ownerData) {
     // Add a new document in collection "owners"
     // using the owner's id and data provided
     await setDoc(doc(DB, this.ENTITY_NAME, ownerId), ownerData);
@@ -57,5 +53,21 @@ export default class OwnerDA {
       throw Error(`Owner with id ${ownerId} does not exist`);
     }
     return docSnap.data();
+  }
+
+  async update(ownerId, ownerData) {
+    // Construct a reference to the owner document
+    const ownerRef = doc(DB, this.ENTITY_NAME, ownerId);
+    try {
+      // Retrieve the owner document to ensure it exists 
+      const ownerSnapShot = await getDoc(ownerRef);
+      // Merge the existing data with the new data
+      const updatedData = { ...ownerSnapShot.data(), ...ownerData };
+      // Update the owner document with the merged data
+      await setDoc(ownerRef, updatedData);
+      return true
+    } catch (error) {
+      throw error;
+    }
   }
 }

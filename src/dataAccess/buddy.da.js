@@ -1,6 +1,6 @@
-import { DB } from 'clients/firebase.app';
 import {
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -8,7 +8,7 @@ import {
   setDoc,
   where,
 } from 'firebase/firestore';
-import { IBuddy } from 'models/buddy.model';
+import { DB } from '../clients/firebase.app';
 
 export default class BuddyDA {
   static instance;
@@ -35,10 +35,10 @@ export default class BuddyDA {
    * @param {Partial<IOwner>} BuddyData - the data of the buddy to create
    * @return {Promise<void>} a promise that resolves when the document is successfully added
    */
-  async create(buddyId, BuddyData) {
+  async create(buddyId, buddyData) {
     // Add a new document in the "buddies" collection
     // using the buddy's id and data provided
-    await setDoc(doc(DB, this.ENTITY_NAME, buddyId), BuddyData);
+    return await setDoc(doc(DB, this.ENTITY_NAME, buddyId), buddyData);
   }
   /**
    * Find a buddy document by its owner id.
@@ -66,10 +66,70 @@ export default class BuddyDA {
     const buddies = [];
     const queryRequest = query(
       collection(DB, this.ENTITY_NAME),
-      where('ownerId', '==', ownerId),
+      where('ownerId', '==', ownerId)
     );
     const docSnaps = await getDocs(queryRequest);
-    docSnaps.forEach(docSnap => buddies.push(docSnap.data()));
+    docSnaps.forEach((docSnap) => {
+      // Get the data from the document snapshot
+      const buddyData = docSnap.data();
+      // Add the buddyId field to the data
+      buddyData.buddyId = docSnap.id;
+      // Push the modified data to the buddies array
+      buddies.push(buddyData);
+    });
     return buddies;
   }
+  /**
+ * Deletes a buddy document from Firestore based on owner ID and buddy ID.
+ *
+ * @param {string} ownerId - The ID of the owner.
+ * @param {string} buddyId - The ID of the buddy document to delete.
+ * @return {Promise<void>} A Promise that resolves once the deletion is complete.
+ */
+  async deleteBuddy(ownerId, buddyId) {
+    // Construct a reference to the buddy document
+    const buddyRef = doc(DB, this.ENTITY_NAME, buddyId);
+    try {
+      // Retrieve the buddy document to ensure it exists and belongs to the owner
+      const buddySnapshot = await getDoc(buddyRef);
+
+      // Check if the buddy document exists and belongs to the owner
+      if (buddySnapshot.exists() && buddySnapshot.data().ownerId === ownerId) {
+        // Delete the buddy document
+        await deleteDoc(buddyRef);
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+  /**
+ * Updates a buddy document in Firestore based on owner ID, buddy ID, and new data.
+ *
+ * @param {string} ownerId - The ID of the owner.
+ * @param {string} buddyId - The ID of the buddy document to update.
+ * @param {Object} newData - The new data to update in the buddy document.
+ * @return {Promise<void>} A Promise that resolves once the update is complete.
+ */
+  async updateBuddy(ownerId, buddyId, newData) {
+    // Construct a reference to the buddy document
+    const buddyRef = doc(DB, 'buddies', buddyId);
+
+    try {
+      // Retrieve the buddy document to ensure it exists and belongs to the owner
+      const buddySnapshot = await getDoc(buddyRef);
+
+      // Check if the buddy document exists and belongs to the owner
+      if (buddySnapshot.exists() && buddySnapshot.data().ownerId === ownerId) {
+        // Merge the existing data with the new data
+        const updatedData = { ...buddySnapshot.data(), ...newData };
+        // Update the buddy document with the merged data
+        await setDoc(buddyRef, updatedData);
+      }
+      return true
+    } catch (error) {
+      
+      throw error;
+    }
+  }
 }
+

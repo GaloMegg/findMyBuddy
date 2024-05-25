@@ -8,11 +8,16 @@ import useUserData from './useUserData';
  *
  * @return {ReactNode} The rendered SignUpContainer component.
  */
-const SignUpContainer = () => {
-  const {userData, setUserDataHandler} = useUserData();
+const SignUpContainer = ({ route, navigation }) => {
+  const { userData, setUserDataHandler } = useUserData();
   return (
     <SafeAreaView>
-      <SignUp {...userData} setUserDataHandler={setUserDataHandler} />
+      <SignUp
+        {...userData}
+        setUserDataHandler={setUserDataHandler}
+        route={route}
+        navigation={navigation}
+      />
     </SafeAreaView>
   );
 };

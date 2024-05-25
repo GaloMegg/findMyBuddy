@@ -1,20 +1,31 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Provider } from 'react-redux';
+import ToastManager from 'toastify-react-native';
+import { setupDatabase } from './src/clients/sqlDataBase';
+import NavigatorContainer from './src/components/navigator/NavigatorContainer';
+import { store } from './src/store/app/store';
+import { COLORS } from './src/utils/constants';
 
+(async () => {
+  await setupDatabase()
+})()
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <GestureHandlerRootView >
+      <Provider store={store}>
+        <ToastManager height={50} textStyle={styles.toast} style={styles.toast} position="top" />
+        <NavigatorContainer />
+      </Provider>
+    </GestureHandlerRootView>
+
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  toast: {
+    backgroundColor: COLORS.WHITE,
+    color: COLORS.DARK_BROWN,
+    fontWeight: '700',
+  }
 });

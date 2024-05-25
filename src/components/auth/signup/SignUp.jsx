@@ -1,8 +1,13 @@
-import { createAccountWithEmailAndPassword } from 'clients/firebase.auth';
-import TextInputCustom from 'components/styledComponents/TextInputCustom';
-import React from 'react';
-import { Button, StyleSheet, View } from 'react-native';
-import OwnerService from 'services/owner.service';
+import React, { useState } from 'react';
+import { Image, ScrollView, StyleSheet, View } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { SCREENS_CONSTANTS } from '~/components/navigator/authNavigation/helper.js';
+import { createAccountWithEmailAndPassword } from '../../../clients/firebase.auth';
+import OwnerService from '../../../services/owner.service';
+import { COLORS, LOGIN_IMAGE } from '../../../utils/constants';
+import ActionButton from '../../styledComponents/ActionButton';
+import Link from '../../styledComponents/Link';
+import TextInputCustom from '../../styledComponents/TextInputCustom';
 
 /**
  * Component for rendering a sign-up form.
@@ -24,48 +29,84 @@ const SignUp = ({
   name,
   email,
   password,
+  phoneNumber,
   setUserDataHandler,
+  navigation,
 }) => {
+  const dispatch = useDispatch()
+  const [errors, setErrors] = useState({})
   return (
-    <View style={styles.container}>
-      {/* Name input */}
-      <TextInputCustom
-        placeholder="Name"
-        onChangeText={(text) => setUserDataHandler('name', text)}
-        value={name}
-      />
-      {/* Email input */}
-      <TextInputCustom
-        placeholder="Email"
-        value={email}
-        onChangeText={(text) => setUserDataHandler('email', text)}
-      />
-      {/* Password input */}
-      <TextInputCustom
-        placeholder="Password"
-        onChangeText={(text) => setUserDataHandler('password', text)}
-        secureTextEntry={true}
-        value={password}
-      />
-      {/* Sign up button */}
-      <Button
-        title="Sign Up"
-        onPress={async () => {
-          const userId = await createAccountWithEmailAndPassword(
-            email,
-            password,
-          );
-          const ownerService = OwnerService.getInstance();
-          ownerService.create(userId, {
-            name,
-            email,
-            location: { latitude: 0, longitude: 0 },
-            ownerId: userId,
-            phoneNumber: '',
-          });
-        }}
-      />
-    </View>
+    <ScrollView style={styles.container} contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }} automaticallyAdjustKeyboardInsets>
+      <View style={styles.inputs}>
+        <Image style={{ width: 200, height: 200 }} source={{ uri: LOGIN_IMAGE }} />
+
+        {/* Name input */}
+        <TextInputCustom
+          label="Name"
+          onChangeText={(text) => setUserDataHandler('name', text)}
+          value={name}
+          error={errors['name']}
+        />
+        <TextInputCustom
+          label="Phone number"
+          value={phoneNumber}
+          onChangeText={(text) => setUserDataHandler('phoneNumber', text)}
+          error={errors['phoneNumber']}
+        />
+        {/* Email input */}
+        <TextInputCustom
+          label="Email"
+          value={email}
+          onChangeText={(text) => setUserDataHandler('email', text)}
+          error={errors['email']}
+        />
+
+        {/* Password input */}
+        <TextInputCustom
+          label="Password"
+          onChangeText={(text) => setUserDataHandler('password', text)}
+          error={errors['password']}
+          secureTextEntry={true}
+          value={password}
+        />
+        {/* Sign up button */}
+
+        <ActionButton
+          text={'Sign Up'}
+          onPress={async () => {
+            try {
+
+              const ownerId = await createAccountWithEmailAndPassword(
+                email,
+                password,
+                phoneNumber,
+                name
+              );
+              const ownerService = OwnerService.getInstance();
+              await ownerService.create(ownerId, {
+                name,
+                email,
+                location: { latitude: 0, longitude: 0 },
+                ownerId: ownerId,
+                phoneNumber: '',
+              });
+              navigation.replace(SCREENS_CONSTANTS.LOG_IN);
+            } catch (errors) {
+              setErrors(errors);
+            }
+          }}
+        >
+        </ActionButton>
+        <Link
+          onPress={() => {
+            navigation.replace(SCREENS_CONSTANTS.LOG_IN);
+          }}
+        >
+          Already have an account?
+        </Link>
+      </View>
+
+    </ScrollView>
   );
 };
 
@@ -73,12 +114,15 @@ export default SignUp;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
-    padding: 20,
+    backgroundColor: COLORS.WHITE,
+    display: 'flex',
+    height: '100%',
+  },
+  inputs: {
     display: 'flex',
     flexDirection: 'column',
-    gap: 10,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    gap: 15,
+    width: '80%',
+  }
 });
