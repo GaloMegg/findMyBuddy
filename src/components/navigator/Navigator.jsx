@@ -1,7 +1,4 @@
-import { NavigationContainer } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
-import useGetCurrentUser from '../../hooks/useGetCurrentUser';
-import { COLORS } from '../../utils/constants';
 import AppNavigation from './appNavigation/AppNavigation';
 import AuthNavigation from './authNavigation/AuthNavigation';
 
@@ -11,18 +8,11 @@ import AuthNavigation from './authNavigation/AuthNavigation';
  *
  * @return {JSX.Element} The rendered navigator component.
  */
-const Navigator = () => {
-  const { ownerId } = useGetCurrentUser()
-  return (
-    <NavigationContainer theme={{ colors: { background: COLORS.WHITE }, }}>{
-      ownerId ?
-        <AppNavigation />
-        :
-        <AuthNavigation />
-    }
-    </NavigationContainer>
-
-  );
+const Navigator = ({ ownerId }) => {
+  return ownerId ?
+    <AppNavigation />
+    :
+    <AuthNavigation />
 };
 export default Navigator;
 const styles = StyleSheet.create({});

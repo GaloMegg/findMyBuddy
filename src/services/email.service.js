@@ -27,8 +27,9 @@ export default class EmailService {
      */
     async sendFoundEmail({ reply_to, from_name, to_name, pet_type, email, phoneNumber, to_email }) {
         const locationService = LocationService.getInstance();
-        const address = await locationService.getFormattedLocation();
-        
+        const location = await locationService.getLocation();
+        const address = await locationService.getFormattedLocation(location);
+
         await emailjs.send(this.#SERVICE_ID, this.#TEMPLATE_ID, {
             from_name,
             to_name,

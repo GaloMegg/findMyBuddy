@@ -52,7 +52,6 @@ const useOwners = ({ ownerId }) => {
         result = await ownerService.update(ownerData.ownerId, ownerData)
         callback && callback(true)
       } catch (error) {
-        console.log(error)
         if (error.cause) {
           setErrors(error.cause)
         } else {

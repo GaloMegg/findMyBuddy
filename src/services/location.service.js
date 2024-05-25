@@ -90,9 +90,7 @@ export default class LocationService {
      * @param {number} coordinates.longitude - The longitude coordinate to reverse geocode.
      * @return {Promise<string>} A promise that resolves to the formatted address as a string.
      */
-    async getFormattedLocation() {
-        await this.requestLocationPermission()
-        const location = await this.getLocation();
+    async getFormattedLocation(location) {
         const address = await this.reverseGeocode(location);
         const formattedAddres = formatAddress(address);
         return formattedAddres

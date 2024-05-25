@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Toast } from 'toastify-react-native';
 import { AUTH } from '../clients/firebase.app';
 import { deleteSession, getSessions } from '../clients/sqlDataBase';
-import { resetUser } from '../store/features/userSlice.slice';
+import { setUser } from '../store/features/userSlice.slice';
 
 /**
  * Custom hook that retrieves the current user's session and provides methods to log out.
@@ -20,10 +21,13 @@ const useGetCurrentUser = () => {
      */
     const logOut = useCallback(
         async () => {
-            setOwnerId(null)
-            dispatch(resetUser())
-            await AUTH.signOut()
-            await deleteSession()
+            try {
+                await deleteSession()
+                await AUTH.signOut()
+                dispatch(setUser({ ownerId: undefined }));
+            } catch (error) {
+                Toast.error(error.message)
+            }
         }, []
     )
 
@@ -34,17 +38,16 @@ const useGetCurrentUser = () => {
      */
     const getUserSession = useCallback(async () => {
         const response = await getSessions()
+        let ownerId = AUTH.currentUser?.uid || _ownerId
         if (response.rows._array.length) {
-            console.log(response.rows._array[0].tokenId)
-            setOwnerId(response.rows._array[0].tokenId)
-        } else (
-            setOwnerId(AUTH.currentUser?.uid || _ownerId)
-        )
+            ownerId = (response.rows._array[0].tokenId)
+        }
+        setOwnerId(ownerId)
     }, [])
 
     useEffect(() => {
         getUserSession()
-    }, [AUTH, _ownerId])
+    }, [AUTH.currentUser, _ownerId])
 
     return {
         logOut,

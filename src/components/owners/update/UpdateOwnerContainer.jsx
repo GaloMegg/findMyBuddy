@@ -9,7 +9,6 @@ const UpdateOwnerContainer = ({ closeModal, ownerInitialData }) => {
   return (
     <UpdateOwner
       onUpdate={async () => {
-        console.log(ownerData)
         await updateOwner(ownerData, closeModal);
       }}
       errors={errors}

@@ -74,7 +74,6 @@ const useSearches = () => {
         setfoundEmail(false)
       }
     }, [])
-
   /**
    * Retrieves all searches based on the current location.
    *
@@ -109,6 +108,8 @@ const useSearches = () => {
       try {
         if (!buddyData.name || !buddyData.type) { throw new Error('Missing buddy data') }
         const searchId = uuid.v4();
+        const location = await locationService.getLocation();
+        const searchService = SearchService.getInstance();
         result = await searchService.create(searchId, { ...location, ...buddyData })
         await buddyService.update(buddyData.ownerId, buddyData.buddyId, { ...buddyData, status: 'LOST' })
         Toast.success('Search created!')
