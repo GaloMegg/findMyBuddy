@@ -72,7 +72,6 @@ const LogIn = ({ email, password, setUserDataHandler, route, navigation }) => {
                 dispatch(setUser({ ownerId }));
                 await insertSession(ownerId)
               } catch (error) {
-                console.log(error)
                 if (error.cause) {
                   setErrors(error.cause)
                 } else {
