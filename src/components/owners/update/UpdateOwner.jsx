@@ -8,10 +8,15 @@ import ProfileImageInput from '../../styledComponents/ProfileImageInput';
 import TextInputCustom from '../../styledComponents/TextInputCustom';
 
 /**
- * Renders a container component for creating buddies.
+ * Renders a container component for updating owner information.
  *
  * @param {Object} props - The properties passed to the component.
+ * @param {boolean} props.loading - Indicates if the component is in a loading state.
  * @param {function} props.closeModal - The function to close the modal.
+ * @param {Object} props.ownerData - The data of the owner.
+ * @param {function} props.setOwnerData - The function to update the owner data.
+ * @param {function} props.onUpdate - The function to update the owner.
+ * @param {Object} props.errors - The errors object.
  * @return {JSX.Element} The rendered container component.
  */
 const UpdateOwner = ({ loading, closeModal, ownerData, setOwnerData, onUpdate, errors }) => {

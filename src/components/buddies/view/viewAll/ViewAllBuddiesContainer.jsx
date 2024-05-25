@@ -1,15 +1,14 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import useBuddies from '~/hooks/useBuddies'
-import useGetCurrentUser from '../../../../hooks/useGetCurrentUser'
 import Loader from '../../../styledComponents/Loader'
 import ViewAllBuddies from './ViewAllBuddies'
+
 
 /**
  * Renders the ViewAllBuddiesContainer component.
  *
  * @param {object} props - The props object.
+ * @param {object} props.navigation - The navigation object.
  * @return {JSX.Element} The rendered ViewAllBuddiesContainer component.
  */
 const ViewAllBuddiesContainer = ({ navigation }) => {

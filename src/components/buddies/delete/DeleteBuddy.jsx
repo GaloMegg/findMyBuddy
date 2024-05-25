@@ -3,11 +3,15 @@ import { COLORS } from '../../../utils/constants';
 import ActionButton from '../../styledComponents/ActionButton';
 import CancelButton from '../../styledComponents/CancelButton';
 import CloseButton from '../../styledComponents/CloseButton';
+
 /**
- * Renders a container component for creating buddies.
+ * Renders a container component for deleting a buddy.
  *
  * @param {Object} props - The properties passed to the component.
+ * @param {boolean} props.loading - Indicates if the delete operation is loading.
  * @param {function} props.closeModal - The function to close the modal.
+ * @param {Object} props.buddyData - The data of the buddy to be deleted.
+ * @param {function} props.onDelete - The function to handle the delete operation.
  * @return {JSX.Element} The rendered container component.
  */
 const DeleteBuddy = ({ loading, closeModal, buddyData, onDelete }) => {

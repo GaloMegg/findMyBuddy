@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Image, ScrollView, StyleSheet, View } from 'react-native';
-import { useDispatch } from 'react-redux';
 import { SCREENS_CONSTANTS } from '~/components/navigator/authNavigation/helper.js';
 import { createAccountWithEmailAndPassword } from '../../../clients/firebase.auth';
 import OwnerService from '../../../services/owner.service';
@@ -12,18 +11,22 @@ import TextInputCustom from '../../styledComponents/TextInputCustom';
 /**
  * Component for rendering a sign-up form.
  *
- * The component takes in three properties:
- * 1. name: The name of the user
- * 2. email: The email of the user
- * 3. password: The password of the user
- * 4. setUserDataHandler: A handler function for setting user data. The function
- * takes in two arguments: the name of the property to set and the new value.
+ * The component takes in the following properties:
+ * - name: The name of the user (string)
+ * - email: The email of the user (string)
+ * - password: The password of the user (string)
+ * - phoneNumber: The phone number of the user (string)
+ * - setUserDataHandler: A handler function for setting user data. The function takes in two parameters: prop (string) and value (string), and updates the user data accordingly. (function)
+ * - navigation: The navigation object for navigating between screens. (object)
  *
- * @param {Props} name - The name of the user
- * @param {Props} email - The email of the user
- * @param {Props} password - The password of the user
- * @param {Props} setUserDataHandler - The handler for setting user data
- * @return {JSX.Element} The sign-up form component
+ * @param {Object} props - The properties for the SignUp component.
+ * @param {string} props.name - The name of the user.
+ * @param {string} props.email - The email of the user.
+ * @param {string} props.password - The password of the user.
+ * @param {string} props.phoneNumber - The phone number of the user.
+ * @param {function} props.setUserDataHandler - The handler function for setting user data.
+ * @param {object} props.navigation - The navigation object for navigating between screens.
+ * @return {JSX.Element} The rendered SignUp component.
  */
 const SignUp = ({
   name,
@@ -33,7 +36,6 @@ const SignUp = ({
   setUserDataHandler,
   navigation,
 }) => {
-  const dispatch = useDispatch()
   const [errors, setErrors] = useState({})
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }} automaticallyAdjustKeyboardInsets>

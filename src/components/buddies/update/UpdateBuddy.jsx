@@ -10,12 +10,18 @@ import TextAreaCustom from '../../styledComponents/TextAreaCustom';
 import TextInputCustom from '../../styledComponents/TextInputCustom';
 import { BUDDIES_TYPE_OPTIONS } from '../helper';
 
+
 /**
- * Renders a container component for creating buddies.
+ * Renders an update buddy component.
  *
  * @param {Object} props - The properties passed to the component.
+ * @param {boolean} props.loading - Indicates if the component is in a loading state.
  * @param {function} props.closeModal - The function to close the modal.
- * @return {JSX.Element} The rendered container component.
+ * @param {Object} props.buddyData - The data of the buddy to be updated.
+ * @param {function} props.setbuddyData - The function to update the buddy data.
+ * @param {function} props.onUpdate - The function to handle the update action.
+ * @param {Object} props.errors - The errors object.
+ * @return {JSX.Element} The rendered update buddy component.
  */
 const UpdateBuddy = ({ loading, closeModal, buddyData, setbuddyData, onUpdate, errors }) => {
     const { pickImage } = useGetImagePicker()

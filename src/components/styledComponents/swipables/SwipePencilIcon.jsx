@@ -1,6 +1,12 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { Pressable, StyleSheet } from 'react-native';
 import { COLORS } from '../../../utils/constants';
+/**
+ * Renders a SwipePencilIcon component that can be pressed.
+ *
+ * @param {Function} onPress - The function to be called when the component is pressed.
+ * @return {JSX.Element} The rendered SwipePencilIcon component.
+ */
 const SwipePencilIcon = ({ onPress }) => {
     return (
         <Pressable

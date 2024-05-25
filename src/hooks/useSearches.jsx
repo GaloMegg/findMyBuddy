@@ -154,7 +154,6 @@ const useSearches = () => {
       setSearches([]);
       setLoading(true);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 

@@ -5,11 +5,13 @@ import CancelButton from '../../styledComponents/CancelButton';
 import CloseButton from '../../styledComponents/CloseButton';
 
 /**
- * Renders a container component for creating buddies.
+ * Renders a modal component for labeling a buddy as lost.
  *
  * @param {Object} props - The properties passed to the component.
+ * @param {boolean} props.loading - Indicates if the component is in a loading state.
  * @param {function} props.closeModal - The function to close the modal.
- * @return {JSX.Element} The rendered container component.
+ * @param {function} props.onLabelAsLost - The function to label the buddy as lost.
+ * @return {JSX.Element} The rendered modal component.
  */
 const LostBuddy = ({ loading, closeModal, onLabelAsLost }) => {
 

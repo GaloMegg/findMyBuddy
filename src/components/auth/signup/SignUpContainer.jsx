@@ -1,12 +1,15 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { SafeAreaView } from 'react-native';
 import SignUp from './SignUp';
 import useUserData from './useUserData';
 
+
 /**
- * This function is a container component for signing up. It uses the useUserData hook to retrieve user data and a handler function. It then renders the SignUp component with the user data and handler function as props within a SafeAreaView.
+ * Renders the SignUp component within a SafeAreaView component, passing user data and a handler function as props.
  *
- * @return {ReactNode} The rendered SignUpContainer component.
+ * @param {Object} route - The route object containing information about the current route.
+ * @param {Object} navigation - The navigation object used to navigate between screens.
+ * @return {JSX.Element} The rendered SignUp component within a SafeAreaView.
  */
 const SignUpContainer = ({ route, navigation }) => {
   const { userData, setUserDataHandler } = useUserData();

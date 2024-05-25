@@ -5,20 +5,24 @@ import { AUTH } from '../../../clients/firebase.app';
 import EditButton from '../../styledComponents/EditButton';
 import SignOutIcon from '../../styledComponents/SignOutIcon';
 import UpdateOwnerContainer from '../update/UpdateOwnerContainer';
-// {"email": "Galomeggiolarobul@gmail.com", "location": {"latitude": 0, "longitude": 0}, "name": "Gaño prueba", "ownerId": "55TmD9uRKQWzwtOq1aJr2i9TW8O2", "phoneNumber": "", profilePicture:''}
+
+
+/**
+ * Renders the ViewOwner component.
+ *
+ * @param {Object} props - The properties passed to the component.
+ * @param {Object} props.owner - The owner object containing information about the owner.
+ * @param {Function} props.logOut - The function to log out the user.
+ * @param {Function} props.findOne - The function to find the owner.
+ * @return {JSX.Element} The rendered ViewOwner component.
+ */
 const ViewOwner = ({ owner, logOut, findOne }) => {
     const [editOwner, setEditOwner] = useState(false)
 
     return (
-        <View style={{ alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+        <View style={styles.container}>
 
-            <SafeAreaView style={{
-                flexDirection: 'row', justifyContent: 'flex-end', width: '100%',
-                alignItems: 'center',
-                paddingHorizontal: 10,
-                marginBottom: 10,
-                gap: 10
-            }}>
+            <SafeAreaView style={styles.safeAreaView}>
                 <EditButton onPress={() => setEditOwner(true)} />
                 <SignOutIcon onPress={logOut} />
             </SafeAreaView>
@@ -26,14 +30,13 @@ const ViewOwner = ({ owner, logOut, findOne }) => {
                 ?
                 <Image
                     source={{ uri: owner.image }}
-                    style={{ width: 150, height: 150, borderRadius: 300 }}
+                    style={styles.image}
                     resizeMode='contain'
                 />
                 :
                 <FontAwesome name="user-circle-o" size={100} color="black" />
             }
-            <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center', }}>
-
+            <View style={styles.textContainer}>
                 <Text style={{ fontSize: 30 }}>{owner.name}</Text>
                 {AUTH?.currentUser?.emailVerified ?
 
@@ -41,15 +44,13 @@ const ViewOwner = ({ owner, logOut, findOne }) => {
                     :
                     <Octicons name="unverified" size={24} color="black" />
                 }
-
-
             </View>
-            <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center', }}>
+            <View style={styles.textContainer}>
                 <Entypo name="mail" size={14} color="black" />
                 <Text> {owner.email}</Text>
             </View>
 
-            <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center', }}>
+            <View style={styles.textContainer}>
                 <Entypo name="phone" size={14} color="black" />
                 <Text>{owner.phoneNumber || '-'}</Text>
             </View>
@@ -66,4 +67,19 @@ const ViewOwner = ({ owner, logOut, findOne }) => {
 }
 
 export default ViewOwner
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    safeAreaView: {
+        flexDirection: 'row', justifyContent: 'flex-end', width: '100%',
+        alignItems: 'center',
+        paddingHorizontal: 10,
+        marginBottom: 10,
+        gap: 10
+    },
+    container: {
+        alignItems: 'center', justifyContent: 'center', gap: 10
+    },
+    textContainer: { flexDirection: 'row', gap: 10, alignItems: 'center', },
+    image: {
+        width: 150, height: 150, borderRadius: 300
+    }
+})

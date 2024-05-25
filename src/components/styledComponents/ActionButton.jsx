@@ -2,6 +2,16 @@ import React from 'react'
 import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native'
 import { COLORS } from '../../utils/constants'
 
+/**
+ * Renders an ActionButton component.
+ *
+ * @param {Object} props - The properties for the ActionButton component.
+ * @param {string} props.text - The text to display on the button.
+ * @param {function} props.onPress - The function to call when the button is pressed.
+ * @param {boolean} props.disabled - Whether the button is disabled.
+ * @param {boolean} props.loading - Whether the button is in a loading state.
+ * @return {JSX.Element} The rendered ActionButton component.
+ */
 const ActionButton = ({ text, onPress, disabled, loading }) => {
     return (
         <Pressable
