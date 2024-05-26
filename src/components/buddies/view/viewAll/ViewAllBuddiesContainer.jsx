@@ -1,5 +1,6 @@
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import useGetCurrentUser from '../../../../hooks/useGetCurrentUser'
 import Loader from '../../../styledComponents/Loader'
 import ViewAllBuddies from './ViewAllBuddies'
 
@@ -31,4 +32,4 @@ const ViewAllBuddiesContainer = ({ navigation }) => {
 
 export default ViewAllBuddiesContainer
 
-const styles = StyleSheet.create({})
+// const styles = StyleSheet.create({})
